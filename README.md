@@ -38,11 +38,6 @@ The entire project is implemented without using external libraries or prebuilt d
   - **BST-enhanced Inverted Index** for faster lookups.
 - Provides Big-O analysis to evaluate the efficiency of each method.
 
-### 🖥️ User Interface
-- A menu-driven interface allows users to:
-  - Enter Boolean or Ranked queries.
-  - View the number of indexed documents and tokens.
-
 ---
 
 ## How it Works
