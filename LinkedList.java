@@ -122,4 +122,18 @@ class LinkedList<T> {
 
         System.out.println("null");
     }
+
+    public String displaydocs() {
+        Node<T> temp = head;
+        String docs="";
+        while (temp.next!=null) {
+            docs+=temp.data + " -> ";
+           // System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        docs+=temp.data ;
+
+        
+        return docs;
+    }
 }
