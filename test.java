@@ -36,11 +36,11 @@ public class test{
         queryProcessing.displayResult(results);
 
         System.out.println("#Q : market OR sports");
-         query = "market OR sports";
+        query = "market OR sports";
         results = queryProcessing.processQuery(query);
         queryProcessing.displayResult(results);
 
-        System.out.println("Q# : market OR sports AND warming");
+        System.out.println("#Q : market OR sports AND warming");
         query = "market OR sports AND warming";
         results = queryProcessing.processQuery(query);
         queryProcessing.displayResult(results);
@@ -48,7 +48,7 @@ public class test{
         System.out.println("\nquery for BST invertedindex\n");
 
         System.out.println("#Q : market AND sports");
-         query = "market AND sports";
+        query = "market AND sports";
         results = queryProcessingBST.processQueryWithBST(query);
         queryProcessing.displayResult(results);
 
@@ -68,8 +68,8 @@ public class test{
         queryProcessing.displayResult(results);
 
         System.out.println("#Q : market OR sports");
-         query = "market OR sports";
-         results = queryProcessingBST.processQueryWithBST(query);
+        query = "market OR sports";
+        results = queryProcessingBST.processQueryWithBST(query);
         queryProcessing.displayResult(results);
 
         System.out.println("Q# : market OR sports AND warming");
