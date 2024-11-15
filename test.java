@@ -6,7 +6,7 @@ public class test{
 
     public static void main(String[] args) {
         
-        SE.Data("C:\\Users\\reema\\Downloads\\DS My Work-20241114T234734Z-001\\DS My Work\\dataset\\stop.txt","C:\\Users\\reema\\Downloads\\DS My Work-20241114T234734Z-001\\DS My Work\\dataset\\dataset.csv");
+        SE.Data("dataset/stop.txt","dataset/dataset.csv");
 
         // query for linkedlist invertedindex
 
