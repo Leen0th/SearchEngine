@@ -31,7 +31,9 @@ public class Word {
     }
     @Override
     public String toString() {
-        return word; // Return the word itself
+    String docs=docIDs.displaydocs();
+
+        return word+"\nducment id : "+docs+"\n";// Return the word itself
     }
 
     public LinkedList<Integer> getDocIDs() {
