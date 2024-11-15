@@ -8,16 +8,16 @@ public class QueryProcessing {
         this.invertedBST = new InvertedIndexBST();
     }
 
-    // Public method to process a query with AND and OR, respecting precedence
+    // Public method to process a mixed query with AND and OR, respecting precedence
     public LinkedList<Integer> processQuery(String query) {
-        // Split the query by "OR" first, so each part can be processed separately
+        // Split the query by "OR" first
         String[] orTerms = query.split("OR");
 
         LinkedList<Integer> result = new LinkedList<>();
 
         for (String orTerm : orTerms) {
-            orTerm = orTerm.trim();
-            LinkedList<Integer> andResult = processAndQuery(orTerm);
+            orTerm = orTerm.trim(); // Trim spaces around the subquery
+            LinkedList<Integer> andResult = processAndQuery(orTerm); // Evaluate the AND subquery
 
             // Add all unique results from andResult to result
             andResult.findfirst();
@@ -37,6 +37,7 @@ public class QueryProcessing {
 
         return result;
     }
+
 
     // Helper method to process a query with only AND terms
     private LinkedList<Integer> processAndQuery(String andQuery) {
