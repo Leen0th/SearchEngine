@@ -1,139 +1,81 @@
-import java.util.Scanner;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-public class SearchEngine {
+public class test{
 
     // Declare the Scanner instance at the class level
-    public static Scanner input = new Scanner(System.in);
-    int tokens = 0;
-    int tokensAfterDeletion = 0;
-    LinkedList<String> stopWords;
-    InvertedIndex invertedindex;
-    Index index;
+    public static SearchEngine SE = new SearchEngine();
 
-    public SearchEngine() {
-        this.stopWords = new LinkedList<>();
-        this.invertedindex = new InvertedIndex();
-        this.index = new Index();
-    }
 
     public static void main(String[] args) {
-        // Create an instance of SearchEngine and start the data processing
-        SearchEngine SE = new SearchEngine();
-        SE.processesData("dataset/stop.txt", "dataset/dataset.csv");
-    }
+        
+        SE.Data("C:\\Users\\reema\\Downloads\\DS My Work-20241114T234734Z-001\\DS My Work\\dataset\\stop.txt","C:\\Users\\reema\\Downloads\\DS My Work-20241114T234734Z-001\\DS My Work\\dataset\\dataset.csv");
 
-    public void processesData(String stopFile, String fileName) {
-        try {
-            stopWords = loadStopWords(stopFile);
+        // query for linkedlist invertedindex
 
-            File docs = new File(fileName);
-            try (BufferedReader docReader = new BufferedReader(new FileReader(docs))) {
-                docReader.readLine(); // cus the first line is a header
+        QueryProcessing queryProcessing = new QueryProcessing(SE.invertedindex);
+        QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
 
-                String line;
-                int lineCount = 0;
+        // Process a query
+        
+        System.out.println("#Q : market AND sports");
+        String query = "market AND sports";
+        LinkedList<Integer> results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                while ((line = docReader.readLine()) != null && lineCount < 50) {
-                    lineCount++;
-                    line = line.toLowerCase();
+        System.out.println("#Q : weather AND warming");
+        query = "weather AND warming";
+        results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                    int firstCommaIndex = line.indexOf(',');
-                    if (firstCommaIndex != -1) {
-                        int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim());
-                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\"", "");
+        System.out.println("#Q : business AND world");
+        query = "business AND world";
+        results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                        String[] words = text.split("\\s+");
+        System.out.println("#Q : weather OR warming");
+        query = "weather OR warming";
+        results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                        String[] cleanedWords = new String[words.length];
-                        int indexCounter = 0;
+        System.out.println("#Q : market OR sports");
+         query = "market OR sports";
+        results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                        for (String word : words) {
-                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", "").trim();
-                            
-                            if (!cleanedWord.isEmpty() && !isStopWord(cleanedWord)) {
-                                tokens++;
-                                this.invertedindex.add(cleanedWord, docId);
-                                tokensAfterDeletion++;
+        System.out.println("Q# : market OR sports AND warming");
+        query = "market OR sports AND warming";
+        results = queryProcessing.processQuery(query);
+        queryProcessing.displayResult(results);
 
-                                cleanedWords[indexCounter++] = cleanedWord;
-                            }
-                        }
+        System.out.println("\nquery for BST invertedindex\n");
 
-                        index.addAllDocument(docId, cleanedWords);
-                        index.printDocument(docId);
-                    }
-                }
-                this.invertedindex.displayInvertedIndex();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
+        System.out.println("#Q : market AND sports");
+         query = "market AND sports";
+        results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-    public LinkedList<String> loadStopWords(String stopFile) {
-        LinkedList<String> stopWordsList = new LinkedList<>();
+        System.out.println("#Q : weather AND warming");
+        query = "weather AND warming";
+        results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-        try (BufferedReader stopReader = new BufferedReader(new FileReader(stopFile))) {
-            String stopWord;
-            while ((stopWord = stopReader.readLine()) != null) {
-                String trimmedWord = stopWord.trim();
-                if (!trimmedWord.isEmpty()) {
-                    stopWordsList.insert(trimmedWord.toLowerCase());
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Stop words file not found: " + e.getMessage());
-        } catch (IOException e) {
-            System.out.println("Error reading stop words file: " + e.getMessage());
-        }
+        System.out.println("#Q : business AND world");
+        query = "business AND world";
+        results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-        return stopWordsList;
-    }
+        System.out.println("#Q : weather OR warming");
+        query = "weather OR warming";
+        results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-    public boolean isStopWord(String word) {
-        if (stopWords.empty()) return false;
-        stopWords.findfirst();
-        do {
-            if (stopWords.retrieve().equals(word)) {
-                return true;
-            }
-            stopWords.findnext();
-        } while (!stopWords.last());
-        if (!stopWords.empty() && stopWords.retrieve().equals(word)) {
-            return true;
-        }
-        return false;
-    }
+        System.out.println("#Q : market OR sports");
+         query = "market OR sports";
+         results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-    public void displayStopWords() {
-        System.out.println("Loaded Stop Words:");
-        stopWords.findfirst();
-        while (!stopWords.empty()) {
-            System.out.print(stopWords.retrieve() + " ");
-            stopWords.findnext();
-        }
-        System.out.println();
-    }
+        System.out.println("Q# : market OR sports AND warming");
+        query = "market OR sports AND warming";
+        results = queryProcessingBST.processQueryWithBST(query);
+        queryProcessing.displayResult(results);
 
-    private Word findWord(LinkedList<Word> wordsList, String word) {
-        if (wordsList.empty()) return null;
-        wordsList.findfirst();
-        do {
-            Word currentWord = wordsList.retrieve();
-            if (currentWord.getWord().equals(word)) {
-                return currentWord;
-            }
-            wordsList.findnext();
-        } while (!wordsList.last());
-        return null;
     }
 }
