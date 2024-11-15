@@ -67,14 +67,6 @@ The entire project is implemented without using external libraries or prebuilt d
 
 ---
 
-## Challenges & Learnings
-
-- Building and optimizing **data structures** like lists and BSTs was a great learning experience.
-- Implementing both **Boolean Retrieval** and **Ranked Retrieval** posed interesting challenges.
-- We enjoyed analyzing the performance and trade-offs between different indexing approaches.
-
----
-
 ## Team Members
 
 - Leen Alotaibi
