@@ -1,59 +1,94 @@
 # Simple Search Engine Project
 
-## Overview
+## Introduction
 
-This project is a **Simple Search Engine** developed as part of the CSC 212 course. It focuses on building a search engine capable of **indexing, retrieving, and ranking documents** using Boolean and ranked retrieval methods. The implementation emphasizes data structures, specifically lists and binary search trees (BSTs), to handle the underlying mechanics of the search process.
+Hi! 👋 We are Leen Alotaibi, Rand Albarqan, and Reema Al kharaan, and this is our **Simple Search Engine Project**, developed for the CSC 212 course. This project demonstrates our collective understanding of data structures and algorithms by building a search engine capable of indexing, retrieving, and ranking documents efficiently. 
+
+The entire project is implemented without using external libraries or prebuilt data structures.
+
+---
+
+## About the Project
+
+### What it Does
+- **Indexes Documents**: Builds mappings between documents and terms for efficient searching.
+- **Processes Queries**: Handles simple Boolean queries (`AND`, `OR`) and ranked retrieval using term frequency.
+- **Ranks Results**: Provides ordered search results with the most relevant documents at the top.
+- **Analyzes Performance**: Compares the efficiency of different indexing techniques.
+
+### Why We Built It
+We wanted to create a foundational search engine to apply concepts such as **Boolean Retrieval**, **Ranked Retrieval**, **Inverted Indexing**, and **Binary Search Trees (BSTs)**, while learning how these are used in real-world applications.
+
+---
 
 ## Features
 
-### Document Processing
+### 📄 Document Processing
 - Reads documents from a CSV file.
-- Tokenizes and preprocesses text by:
-  - Converting to lowercase.
-  - Removing stop words and punctuation.
-- Builds an index mapping document IDs to words.
+- Cleans and tokenizes text:
+  - Converts text to lowercase.
+  - Removes punctuation and stop words (like "the", "is", "and").
+- Builds both **index** and **inverted index** structures.
 
-### Indexing
-- Creates an inverted index mapping terms to lists of document IDs.
-- Enhances the inverted index with Binary Search Trees (BSTs) for efficient lookups.
+### 🔍 Query Processing
+- **Boolean Retrieval**: Supports queries like `word1 AND word2` or `word1 OR word2`.
+- **Ranked Retrieval**: Scores and ranks documents based on term frequency (TF).
 
-### Query Processing
-- Supports **Boolean Retrieval** (AND, OR queries).
-- Implements **Ranked Retrieval** using term frequency (TF) to rank results.
+### 📊 Performance
+- Implements and compares indexing methods:
+  - **Basic Index** (Lists).
+  - **Inverted Index** (Lists of Lists).
+  - **BST-enhanced Inverted Index** for faster lookups.
+- Provides Big-O analysis to evaluate the efficiency of each method.
 
-### Ranking
-- Scores documents based on query term frequencies.
-- Ranks documents in descending order of relevance.
+### 🖥️ User Interface
+- A menu-driven interface allows users to:
+  - Enter Boolean or Ranked queries.
+  - View the number of indexed documents and tokens.
 
-### Performance Analysis
-- Compares the efficiency of various indexing methods (basic index, inverted index, BST-based index).
-- Includes Big-O analysis in the documentation.
+---
 
-### User Interface
-- Provides a simple menu-driven interface for:
-  - Boolean queries.
-  - Ranked queries.
-  - Displaying indexed document and token counts.
+## How it Works
 
-## Data Structures
+1. **Document Processing**:
+   - Preprocesses text by removing stop words and punctuation, and converting it to lowercase.
+   - Builds the index and inverted index.
+   
+2. **Query Handling**:
+   - Processes **Boolean queries** using set operations (intersection for `AND`, union for `OR`).
+   - Scores and ranks results for **Ranked Retrieval** using Term Frequency (TF).
 
-- **Lists**: Used for the document collection, vocabulary, and basic indices.
-- **Inverted Index**: Maps terms to document lists for quick retrieval.
-- **Binary Search Trees (BSTs)**: Enhance the performance of the inverted index by reducing search time.
+3. **Performance Analysis**:
+   - Compares the efficiency of list-based and tree-based indexing structures.
+
+---
 
 ## Deliverables
 
-1. **Implementation**:
-   - Document processing, indexing, query processing, and ranking.
-   - BST-enhanced inverted index.
-2. **Performance Analysis**:
-   - Comparisons of efficiency between different indexing methods.
-3. **Documentation**:
-   - Clear explanation of design, implementation, and usage.
-   - Class diagram illustrating project structure.
-4. **Test Menu**:
-   - Boolean Retrieval.
-   - Ranked Retrieval.
-   - Indexed document and token counts.
-5. **CSV-based Input**:
-   - Preprocessed dataset of documents for testing.
+- **Index**: Maps documents to words using lists.
+- **Inverted Index**: Maps terms to documents containing those terms.
+- **BST-enhanced Inverted Index**: Optimizes search performance.
+- **Query Processor**: Supports Boolean and Ranked Retrieval.
+- **Ranking**: Implements Term Frequency (TF) for relevance scoring.
+- **Documentation**: Includes design, implementation details, and performance analysis.
+- **Test Menu**: A user-friendly menu for testing the search engine.
+
+---
+
+## Challenges & Learnings
+
+- Building and optimizing **data structures** like lists and BSTs was a great learning experience.
+- Implementing both **Boolean Retrieval** and **Ranked Retrieval** posed interesting challenges.
+- We enjoyed analyzing the performance and trade-offs between different indexing approaches.
+
+---
+
+## Team Members
+
+- Leen Alotaibi
+- Rand Albarqan
+- Reema Al kharaan
+
+---
+
+### Thank you for checking out our project! 😊 
