@@ -2,22 +2,30 @@ public class QueryProcessing {
     public InvertedIndex inverted;
     public InvertedIndexBST invertedBST;
 
+    public QueryProcessing(InvertedIndexBST invertedBST) {
+        this.invertedBST = invertedBST;
+    }
+
+    public QueryProcessing(InvertedIndex inverted) {
+        this.inverted = inverted;
+    }
+
     // Constructor to initialize the inverted index objects
     public QueryProcessing() {
         this.inverted = new InvertedIndex();
         this.invertedBST = new InvertedIndexBST();
     }
 
-    // Public method to process a mixed query with AND and OR, respecting precedence
+    // Public method to process a query with AND and OR, respecting precedence
     public LinkedList<Integer> processQuery(String query) {
-        // Split the query by "OR" first
+        // Split the query by "OR" first, so each part can be processed separately
         String[] orTerms = query.split("OR");
 
         LinkedList<Integer> result = new LinkedList<>();
 
         for (String orTerm : orTerms) {
-            orTerm = orTerm.trim(); // Trim spaces around the subquery
-            LinkedList<Integer> andResult = processAndQuery(orTerm); // Evaluate the AND subquery
+            orTerm = orTerm.trim();
+            LinkedList<Integer> andResult = processAndQuery(orTerm);
 
             // Add all unique results from andResult to result
             andResult.findfirst();
@@ -37,7 +45,6 @@ public class QueryProcessing {
 
         return result;
     }
-
 
     // Helper method to process a query with only AND terms
     private LinkedList<Integer> processAndQuery(String andQuery) {
@@ -142,6 +149,46 @@ public class QueryProcessing {
                 break;
             }
         }
-        System.out.println("}");
+        System.out.println("}\n");
+    }
+    public LinkedList<Integer> processQueryWithBST(String query) {
+        // Split the query by "OR" first
+        String[] orTerms = query.split("OR");
+    
+        LinkedList<Integer> result = new LinkedList<>();
+    
+        for (String orTerm : orTerms) {
+            orTerm = orTerm.trim();
+            LinkedList<Integer> andResult = processAndQueryWithBST(orTerm);
+            
+            // Add unique results to the final result
+            result = ORQuery(result, andResult);
+        }
+    
+        return result;
+    }
+    
+    private LinkedList<Integer> processAndQueryWithBST(String andQuery) {
+        andQuery = andQuery.toLowerCase();
+        String[] terms = andQuery.split("and");
+        LinkedList<Integer> result = new LinkedList<>();
+    
+        if (terms.length == 0) return result;
+    
+        LinkedList<Integer> firstTermDocIDs = this.invertedBST.getDocumentIDsForWord(terms[0].trim());
+        if (firstTermDocIDs == null) return result;
+    
+        result = firstTermDocIDs;
+    
+        for (int i = 1; i < terms.length; i++) {
+            String term = terms[i].trim();
+            LinkedList<Integer> termDocIDs = this.invertedBST.getDocumentIDsForWord(term);
+            if (termDocIDs == null) {
+                return new LinkedList<>(); // Return empty if any term has no documents
+            }
+            result = ANDQuery(result, termDocIDs);
+        }
+    
+        return result;
     }
 }
