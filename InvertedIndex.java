@@ -59,7 +59,7 @@ public class InvertedIndex {
             newWord.word = word;
             newWord.addDoc(docId);
             index.insert(newWord); 
-            System.out.println("Adding word: " + word + ", Document ID: " + docId); // Debugging 
+            
             return;
         }
     
