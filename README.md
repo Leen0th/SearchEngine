@@ -16,9 +16,6 @@ The entire project is implemented without using external libraries or prebuilt d
 - **Ranks Results**: Provides ordered search results with the most relevant documents at the top.
 - **Analyzes Performance**: Compares the efficiency of different indexing techniques.
 
-### Why We Built It
-We wanted to create a foundational search engine to apply concepts such as **Boolean Retrieval**, **Ranked Retrieval**, **Inverted Indexing**, and **Binary Search Trees (BSTs)**, while learning how these are used in real-world applications.
-
 ---
 
 ## Features
