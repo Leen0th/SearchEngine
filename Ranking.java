@@ -77,8 +77,56 @@ public class Ranking {
         return score; // Return the total score
     }
     
-    
-    
-    
+    public void rank_query(String query) {
+        this.query = query; // Reserve the query
+
+        // Split the query into terms
+        String[] terms = query.split("\\s+");
+        for (String term : terms) {
+            // Get document IDs linked to the term using the inverted index
+             LinkedList<Integer> docIDs = invertedBST.getDocumentIDsForWord(term.toLowerCase());
+             add_in_one_list_sorted(docIDs); // Add doc IDs to queryDocID
+        }
+    }
+
+    // Method to insert an ID into the sorted position in queryDocID
+    public void insert_sorted_ids_list(Integer id) {
+        // Reserve the ID and add it into the right position (low to high)
+        queryDocID.findfirst(); // Start from the head
+
+        if (queryDocID.empty() || (queryDocID.last() && queryDocID.retrieve() < id)) {
+            queryDocID.insert(id); // Add to the end if empty or greater than last
+        } else {
+            while (!queryDocID.last()) {
+                if (queryDocID.retrieve() >= id) {
+                    queryDocID.insert(id); // Insert at the right position
+                    return; // Exit after insertion
+                }
+                queryDocID.findnext(); // Move to the next node
+            }
+            // Handle the last node case
+            if (!queryDocID.last()) {
+                queryDocID.insert(id);
+            }
+        }
+    }
+
+    // Method to add all elements of list A of doc IDs related to a term to queryDocID
+    public void add_in_one_list_sorted(LinkedList<Integer> A) {
+        if (A != null && !A.empty()) { // Check if the list is not null and not empty
+            A.findfirst(); // Start from the head of list A
+            while (!A.last()) { // Iterate through list A
+                Integer id = A.retrieve(); // Get the current element
+                insert_sorted_ids_list(id); // Insert the ID in sorted order
+                A.findnext(); // Move to the next element
+            }
+            // Handle the last element in A
+            if (!A.empty()) {
+                Integer id = A.retrieve();
+                insert_sorted_ids_list(id);
+            }
+        }
+    }
+
 }
     
