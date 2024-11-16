@@ -19,29 +19,47 @@ public class Document {
         index.insert(new Word(new LinkedList<>(), word));
     }
 
-public boolean findWord(String word) {
-    if (index.empty()) {
-        return false; // List is empty, so word cannot be found
-    }
+    public boolean findWord(String word) {
+        if (index.empty()) {
+            return false; // List is empty, so word cannot be found
+        }
 
-    index.findfirst(); // Start from the head of the LinkedList
-    do {
-        // Retrieve the current Word object and check its word
+        index.findfirst(); // Start from the head of the LinkedList
+        do {
+            // Retrieve the current Word object and check its word
+            if (index.retrieve().getWord().equals(word)) {
+                return true; // Word found
+            }
+            index.findnext(); // Move to the next Word in the list
+        } while (!index.last()); // Continue until we reach the end of the list
+    if(index.last()){
         if (index.retrieve().getWord().equals(word)) {
             return true; // Word found
         }
-        index.findnext(); // Move to the next Word in the list
-    } while (!index.last()); // Continue until we reach the end of the list
-if(index.last()){
-    if (index.retrieve().getWord().equals(word)) {
-        return true; // Word found
-    }
     
-}
-    return false; // Word not found
-}
-     public int getId() {
+    }
+        return false; // Word not found
+    }
+
+    public int getId() {
         return documentID;
+    }
+
+    public String getDocumentContent() {
+        if (index.empty()) {
+            return ""; // Empty document
+        }
+    
+        StringBuilder content = new StringBuilder();
+        index.findfirst();
+    
+        while (!index.last()) {
+            content.append(index.retrieve().getWord()).append(" ");
+            index.findnext();
+        }
+    
+        content.append(index.retrieve().getWord());
+        return content.toString().trim();
     }
 
 }
