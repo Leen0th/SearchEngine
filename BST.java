@@ -1,10 +1,10 @@
 public class BST<T> {
 
     // Inner class for BST nodes
-    private class BSTNode<T> {
+    private class BSTNode {
         String key; // Change key from int to String
         T data;
-        BSTNode<T> left, right;
+        BSTNode left, right;
 
         // Constructor for BSTNode
         public BSTNode(String key, T data) {
@@ -16,7 +16,7 @@ public class BST<T> {
     }
 
     // Root and current node pointers
-    private BSTNode<T> root, current;
+    private BSTNode root, current;
 
     // Constructor for BST
     public BST() {
@@ -40,8 +40,8 @@ public class BST<T> {
 
     // Method to find a key in the BST
     public boolean findkey(String tkey) {
-        BSTNode<T> p = root;
-        BSTNode<T> q = root;
+        BSTNode p = root;
+        BSTNode q = root;
 
         if (empty())
             return false;
@@ -64,7 +64,7 @@ public class BST<T> {
 
     // Method to insert a new node in the BST
     public boolean insert(String k, T val) {
-        BSTNode<T> p, q = current;
+        BSTNode p, q = current;
 
         // Check if the key already exists
         if (findkey(k)) {
@@ -73,7 +73,7 @@ public class BST<T> {
         }
 
         // Create a new node
-        p = new BSTNode<>(k, val);
+        p = new BSTNode(k, val);
 
         // If the tree is empty, set the root to the new node
         if (empty()) {
@@ -96,7 +96,7 @@ public class BST<T> {
         inOrderRec(root);
     }
 
-    private void inOrderRec(BSTNode<T> node) {
+    private void inOrderRec(BSTNode node) {
         if (node != null) {
             inOrderRec(node.left);
             System.out.println("Word : " + node.data.toString());
@@ -109,7 +109,7 @@ public class BST<T> {
         preOrderRec(root);
     }
 
-    private void preOrderRec(BSTNode<T> node) {
+    private void preOrderRec(BSTNode node) {
         if (node != null) {
             System.out.println("Key: " + node.key + ", Data: " + node.data);
             preOrderRec(node.left);
