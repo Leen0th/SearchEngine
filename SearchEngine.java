@@ -137,16 +137,4 @@ public void displayStopWords() {
     System.out.println(); // Print a newline at the end
 }
 
-private Word findWord(LinkedList<Word> wordsList, String word) {
-    if (wordsList.empty()) return null; // Handle empty list case
-    wordsList.findfirst(); // Start from the head of the list
-    do {
-        Word currentWord = wordsList.retrieve(); // Get the current Word object
-        if (currentWord.getWord().equals(word)) {
-            return currentWord; // Return the existing Word object if found
-        }
-        wordsList.findnext(); // Move to the next node
-    } while (!wordsList.last()); // Continue until the last node
-    return null; // Not found
-}
 }
