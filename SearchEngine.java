@@ -11,6 +11,7 @@ public class SearchEngine {
     InvertedIndex invertedindex;
     InvertedIndexBST invertedindexBST;
     Index index; // Add an Index instance
+    Ranking ranking ;
 
     public SearchEngine() {
         this.stopWords = new LinkedList<>();
@@ -135,6 +136,10 @@ public void displayStopWords() {
         stopWords.findnext(); // Move to the next node
     }
     System.out.println(); // Print a newline at the end
+}
+public void searchAndRank(String query) {
+    this.ranking = new Ranking(invertedindexBST, index);
+    ranking.rank_query(query);
 }
 
 }
