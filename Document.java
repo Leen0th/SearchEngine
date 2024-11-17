@@ -61,5 +61,32 @@ public class Document {
         content.append(index.retrieve().getWord());
         return content.toString().trim();
     }
-
+    public int countTermOccurrences(String word) {
+        int count = 0; // Initialize a count variable
+    
+        // Check if the index is empty
+        if (index.empty()) {
+            return count; // Return 0 if the document has no words
+        }
+    
+        index.findfirst(); // Start from the head of the linked list
+    
+        // Iterate through the linked list of words
+        do {
+            // Check if the current word matches the input word
+            if (index.retrieve().getWord().equals(word)) {
+                count++; // Increment the count if a match is found
+            }
+            index.findnext(); // Move to the next word
+        } while (!index.last()); // Continue until we reach the end of the list
+    
+        // Check the last element (if necessary)
+        if (index.last()) {
+            if (index.retrieve().getWord().equals(word)) {
+                count++; // Increment count for the last word if it matches
+            }
+        }
+    
+        return count; // Return the total count of occurrences
+    }
 }
