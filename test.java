@@ -14,7 +14,7 @@ public class test{
         QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
 
         // Process a query
-        
+        /* 
         System.out.println("#Q : market AND sports");
         String query = "market AND sports";
         LinkedList<Integer> results = queryProcessing.processQuery(query);
@@ -76,6 +76,8 @@ public class test{
         query = "market OR sports AND warming";
         results = queryProcessingBST.processQueryWithBST(query);
         queryProcessing.displayResult(results);
-
+*/
+String query="market sports";
+SE.searchAndRank("market sports");
     }
 }
