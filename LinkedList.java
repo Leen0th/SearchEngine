@@ -2,6 +2,11 @@ class LinkedList<T> {
     
     private Node<T> head;
     private Node<T> current;
+    int size;
+
+    public int size() {
+        return size;
+    }
 
     // Node inner class for the linked list
     private static class Node<T> {
@@ -18,6 +23,7 @@ class LinkedList<T> {
     public LinkedList() {
         head = null;
         current = null;
+        size=0;
     }
 
     // Check if list is empty
@@ -71,6 +77,7 @@ class LinkedList<T> {
             current.next = newNode; // Insert the new node after current
             current = newNode; // Move current to the new node
         }
+        size++;
     }
 
     // Remove current node from the list
