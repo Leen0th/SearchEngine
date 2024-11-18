@@ -1,6 +1,10 @@
 public class InvertedIndexBST {
     private BST<Word> index; // Using BST instead of LinkedList
+    private int size=0;
 
+    public int size() {
+        return size;
+    }
     // Constructor
     public InvertedIndexBST() {
         index = new BST<>(); // Initialize the BST
@@ -30,14 +34,16 @@ public class InvertedIndexBST {
             Word existingWord = index.retrieve(); // Get the existing Word object
             if (existingWord.searchDocId(docId) == false) { // Check if doc ID exists
                 existingWord.addDoc(docId); // Add doc ID if it doesn't already exist
+                
             }
+            
         } else {
             // If the word was not found, create a new Word entry
             Word newWord = new Word();
             newWord.word = word;
             newWord.addDoc(docId);
             index.insert(word, newWord);
-           
+            size++;
         }
     }
 
