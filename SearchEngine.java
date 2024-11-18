@@ -141,9 +141,6 @@ public class SearchEngine {
         }
         int s = invertedindexBSTvocab.size();
         vocap = s;
-        // Print token and vocabulary counts
-        System.out.println("Total tokens: " + tokens);
-        System.out.println("Total vocap: " + vocap);
     }
 
     // Load stop words from the file into a String array
