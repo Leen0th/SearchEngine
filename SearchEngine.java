@@ -11,6 +11,7 @@ public class SearchEngine {
     LinkedList<String> stopWords;
     InvertedIndex invertedindex;
     InvertedIndexBST invertedindexBST;
+    InvertedIndexBST invertedindexBSTvocab;
     Index index; // Add an Index instance
     Ranking ranking;
 
@@ -19,6 +20,7 @@ public class SearchEngine {
         this.invertedindex = new InvertedIndex();
         this.invertedindexBST = new InvertedIndexBST();
         this.index = new Index(); // Initialize the Index
+        this.invertedindexBSTvocab = new InvertedIndexBST();
     }
 
     public void Data(String stopFile, String fileName) {
@@ -52,10 +54,11 @@ public class SearchEngine {
                     if (firstCommaIndex != -1) {
                         // Extract the docId from the first cell
                         int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim()); // Parse the first cell as docId
-                        String text = line.substring(firstCommaIndex+1 ).trim().replaceAll("\"", ""); // Extract the content after the first comma
-                        text=text.replaceAll("-", " ");
+                        String text = line.substring(firstCommaIndex+1 ).trim().replaceAll("\"", "").trim(); // Extract the content after the first comma
+                        text=text.replaceAll("-", " ").trim();
+                        text=text.replaceAll("[^a-zA-Z0-9]", " ").trim();
                         // Split the text into words
-                        String[] words = text.split("[\\s,]+"); // Split by one or more whitespace characters
+                        String[] words = text.split("[\\s]+"); // Split by one or more whitespace characters
                      
                         
                         // Prepare to collect words for this document
@@ -65,13 +68,13 @@ public class SearchEngine {
                         
                         // Process each word
                         for (String word : words) {
-                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", "").trim(); // Clean the word
-                           
+                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", " ").trim(); // Clean the word
+                           System.out.println(cleanedWord);
 
                             // Count tokens (every valid word)
                           
                                 tokens++; // Increment token count for every word
-                     
+                                this.invertedindexBSTvocab.add(cleanedWord, docId);
     
                             // Check if the cleaned word is valid (not a stop word)
                             if (!cleanedWord.isEmpty() && !isStopWord(cleanedWord)) {
@@ -156,7 +159,7 @@ public class SearchEngine {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-    int s= invertedindexBST.size();
+    int s= invertedindexBSTvocab.size();
     vocap=s;
         // Print token and vocabulary counts
         System.out.println("Total tokens: " + tokens);
