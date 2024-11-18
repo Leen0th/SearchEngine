@@ -17,9 +17,6 @@ class DocumentRank {
     
     public class Ranking {
     
-    
-    
-    
     // Initialize variables
     int DocID = 0; // ID of the document
     int Score = 0; // Rank/Score of the document
