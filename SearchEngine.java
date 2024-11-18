@@ -31,7 +31,7 @@ public class SearchEngine {
             File docsfile = new File(fileName);
             try (BufferedReader docReader = new BufferedReader(new FileReader(docsfile))) {
                 // Skip the first line (if necessary)
-                String header = docReader.readLine(); // Read the header line
+                docReader.readLine(); // Read the header line
                 
                 String line;
                 int lineCount = 0; // Counter for processed lines
@@ -181,17 +181,6 @@ public class SearchEngine {
             return true;
         }
         return false; // Not found
-    }
-
-    // Method to display the loaded stop words
-    public void displayStopWords() {
-        System.out.println("Loaded Stop Words:");
-        stopWords.findfirst(); // Start from the head of the list
-        while (!stopWords.empty()) {
-            System.out.print(stopWords.retrieve() + " ");
-            stopWords.findnext(); // Move to the next node
-        }
-        System.out.println(); // Print a newline at the end
     }
 
     public void searchAndRank(String query) {
