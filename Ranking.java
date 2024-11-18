@@ -147,8 +147,6 @@ class DocumentRank {
     }
     
     public void displaySortedRankedResults(DocumentRank[] rankedArray) {
-        System.out.println("################## Ranked Retrieval ###########################");
-        System.out.printf("## Q: %s%n", query);
         System.out.println("DocID   Score");
         for (DocumentRank docRank : rankedArray) {
             docRank.display(); // Display the document ID and score
