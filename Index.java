@@ -33,6 +33,21 @@ public class Index {
         } else {
             System.out.println("Document " + docID + " words: [" + content + "]");
         }
-    }    
+    }
+    
+    
+    //Retrieves all document IDs where a specific term appears.
+    public LinkedList<Integer> getDocumentIDs(String term) {
+        LinkedList<Integer> result = new LinkedList<>();
+        
+        // Iterate through all documents to find the term
+        for (int i = 0; i < indexes.length; i++) {
+            if (indexes[i].findWord(term)) {
+                result.insert(i); // Add document ID to the result list
+            }
+        }
+        
+        return result;
+    }
 
 }
