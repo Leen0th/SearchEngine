@@ -3,15 +3,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 
 public class SearchEngine {
     int tokens = 0;
-    int tokensAfterDeletion = 0;
+    int vocap = 0;
     LinkedList<String> stopWords;
     InvertedIndex invertedindex;
     InvertedIndexBST invertedindexBST;
     Index index; // Add an Index instance
-    Ranking ranking ;
+    Ranking ranking;
 
     public SearchEngine() {
         this.stopWords = new LinkedList<>();
@@ -29,58 +30,124 @@ public class SearchEngine {
             File docsfile = new File(fileName);
             try (BufferedReader docReader = new BufferedReader(new FileReader(docsfile))) {
                 // Skip the first line (if necessary)
-                docReader.readLine(); // Assuming the first line is a header
+                String header = docReader.readLine(); // Read the header line
                 
                 String line;
                 int lineCount = 0; // Counter for processed lines
-
+             
+    
                 // Process the document file
-                while ((line = docReader.readLine()) != null && lineCount < 50) {
+                while (  lineCount < 50) {
+                    line = docReader.readLine() ;
+                    
                     lineCount++; // Increment line count here
-                    line = line.toLowerCase();
-
+                    
+               
+    
+                    // Convert to lowercase and handle potential formatting issues
+                    line = line.toLowerCase().replaceAll("[\"]", ""); // Remove quotes
+                    
                     // Find the first comma
                     int firstCommaIndex = line.indexOf(',');
                     if (firstCommaIndex != -1) {
                         // Extract the docId from the first cell
                         int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim()); // Parse the first cell as docId
-                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\"", ""); // Get the rest of the line
-
+                        String text = line.substring(firstCommaIndex+1 ).trim().replaceAll("\"", ""); // Extract the content after the first comma
+                        text=text.replaceAll("-", " ");
                         // Split the text into words
-                        String[] words = text.split("\\s+"); // Split by one or more whitespace characters
-
+                        String[] words = text.split("[\\s,]+"); // Split by one or more whitespace characters
+                     
+                        
                         // Prepare to collect words for this document
-                        String[] cleanedWords = new String[words.length];
+                        String[] cleanedWords = new String[1600];
                         int indexCounter = 0;
-
+    
+                        
                         // Process each word
                         for (String word : words) {
                             String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", "").trim(); // Clean the word
-                            
-                            // Check if the cleaned word is valid
+                           
+
+                            // Count tokens (every valid word)
+                          
+                                tokens++; // Increment token count for every word
+                     
+    
+                            // Check if the cleaned word is valid (not a stop word)
                             if (!cleanedWord.isEmpty() && !isStopWord(cleanedWord)) {
-                                tokens++; // Increment token count only for valid words
+                                // Add to unique words for vocabulary
+                                
+    
+                                // Add to the inverted index
                                 this.invertedindex.add(cleanedWord, docId); // Add to the inverted index
                                 this.invertedindexBST.add(cleanedWord, docId);
-                                tokensAfterDeletion++; // Increment count for tokens after deletion
                                 
                                 // Store valid cleaned words for the document
                                 cleanedWords[indexCounter++] = cleanedWord;
                             }
                         }
-
+    
                         // Add all cleaned words to the index
                         index.addAllDocument(docId, cleanedWords);
-
- 
-                        
-                        // Print the document with its words
-                        //index.printDocument(docId);
                     }
                 }
-                                       // Optionally, display the inverted index
-                                      // this.invertedindex.displayInvertedIndex();
-                                      //this.invertedindexBST.displayInvertedIndex();
+                while (  lineCount < 35) {
+                    line = docReader.readLine() ;
+                    
+                    lineCount++; // Increment line count here
+                    
+               
+    
+                    // Convert to lowercase and handle potential formatting issues
+                    line = line.toLowerCase().replaceAll("[\"]", ""); // Remove quotes
+                    
+                    // Find the first comma
+                    int firstCommaIndex = line.indexOf(',');
+                    if (firstCommaIndex != -1) {
+                        // Extract the docId from the first cell
+                        int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim()); // Parse the first cell as docId
+                    String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\"", "").replace("-", " "); // Extract the content after the first comma and replace hyphens with spaces
+                        
+                        // Split the text into words
+                        String[] words = text.split(" "); // Split by one or more whitespace characters
+                       
+                        
+                        // Prepare to collect words for this document
+                        String[] cleanedWords = new String[words.length];
+                        int indexCounter = 0;
+    
+                        // Process each word
+                        for (String word : words) {
+                            
+                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", "").trim(); // Clean the word
+                            
+                            // Count tokens (every valid word)
+                            if (!cleanedWord.isEmpty()) {
+                                tokens++; // Increment token count for every word
+                            }
+    
+                            // Check if the cleaned word is valid (not a stop word)
+                            if (!cleanedWord.isEmpty() && !isStopWord(cleanedWord)) {
+                                // Add to unique words for vocabulary
+                               
+    
+                                // Add to the inverted index
+                                this.invertedindex.add(cleanedWord, docId); // Add to the inverted index
+                                this.invertedindexBST.add(cleanedWord, docId);
+                                
+                                // Store valid cleaned words for the document
+                                cleanedWords[indexCounter++] = cleanedWord;
+                               
+                            }
+                        }
+    
+                        // Add all cleaned words to the index
+                        index.addAllDocument(docId, cleanedWords);
+                    }
+                }
+    
+                // Update the vocabulary count
+               
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -89,8 +156,13 @@ public class SearchEngine {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
+    int s= invertedindexBST.size();
+    vocap=s;
+        // Print token and vocabulary counts
+        System.out.println("Total tokens: " + tokens);
+        System.out.println("Total vocap: " + vocap);
     }
-    
+
     // Load stop words from the file into a String array
     private LinkedList<String> loadStopWords(String stopFile) {
         LinkedList<String> stopWordsList = new LinkedList<String>();
@@ -112,34 +184,35 @@ public class SearchEngine {
         return stopWordsList; // Return the LinkedList
     }
 
- private boolean isStopWord(String word) {
-    if (stopWords.empty()) return false; // Early return if the list is empty
-    stopWords.findfirst(); // Start from the head of the list
-    do {
-        if (stopWords.retrieve().equals(word)) {
-            return true; // Found a match
+    private boolean isStopWord(String word) {
+        if (stopWords.empty()) return false; // Early return if the list is empty
+        stopWords.findfirst(); // Start from the head of the list
+        do {
+            if (stopWords.retrieve().equals(word)) {
+                return true; // Found a match
+            }
+            stopWords.findnext(); // Move to the next node
+        } while (!stopWords.last()); // Loop until the last node
+        // Check the last word separately
+        if (!stopWords.empty() && stopWords.retrieve().equals(word)) {
+            return true;
         }
-        stopWords.findnext(); // Move to the next node
-    } while (!stopWords.last()); // Loop until the last node
-    // Check the last word separately
-    if (!stopWords.empty() && stopWords.retrieve().equals(word)) {
-        return true;
+        return false; // Not found
     }
-    return false; // Not found
-}
-    // Method to display the loaded stop words
-public void displayStopWords() {
-    System.out.println("Loaded Stop Words:");
-    stopWords.findfirst(); // Start from the head of the list
-    while (!stopWords.empty()) {
-        System.out.print(stopWords.retrieve() + " ");
-        stopWords.findnext(); // Move to the next node
-    }
-    System.out.println(); // Print a newline at the end
-}
-public void searchAndRank(String query) {
-    this.ranking = new Ranking(invertedindexBST, index);
-    ranking.rank_query(query);
-}
 
+    // Method to display the loaded stop words
+    public void displayStopWords() {
+        System.out.println("Loaded Stop Words:");
+        stopWords.findfirst(); // Start from the head of the list
+        while (!stopWords.empty()) {
+            System.out.print(stopWords.retrieve() + " ");
+            stopWords.findnext(); // Move to the next node
+        }
+        System.out.println(); // Print a newline at the end
+    }
+
+    public void searchAndRank(String query) {
+        this.ranking = new Ranking(invertedindexBST, index);
+        ranking.rank_query(query);
+    }
 }
