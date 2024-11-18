@@ -2,7 +2,7 @@ class LinkedList<T> {
     
     private Node<T> head;
     private Node<T> current;
-    int size;
+    private int size;
 
     public int size() {
         return size;
