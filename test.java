@@ -10,11 +10,12 @@ public class test {
         // Query for LinkedList-based inverted index
         QueryProcessing queryProcessing = new QueryProcessing(SE.invertedindex);
         QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
+        QueryProcessing queryProcessingIndex = new QueryProcessing(SE.index); // QueryProcessing for Index
 
         // Initialize Ranking with InvertedIndexBST and Index
         Ranking ranking = new Ranking(SE.invertedindexBST, SE.index);
 
-        System.out.println("################### Boolean Retrieval LinkedList ####################");
+        System.out.println("################### Boolean Retrieval Inverted index LinkedList ####################");
 
         // Boolean Retrieval Queries using LinkedList
         System.out.println("# Q: market AND sports");
@@ -35,7 +36,7 @@ public class test {
         System.out.println("# Q: market OR sports AND warming");
         queryProcessing.displayResult(queryProcessing.processQuery("market OR sports AND warming"));
 
-        System.out.println("################### Boolean Retrieval BST ####################");
+        System.out.println("################### Boolean Retrieval Inverted index BST ####################");
 
         // Boolean Retrieval Queries using BST
         System.out.println("# Q: market AND sports");
@@ -55,6 +56,27 @@ public class test {
 
         System.out.println("# Q: market OR sports AND warming");
         queryProcessingBST.displayResult(queryProcessingBST.processQueryWithBST("market OR sports AND warming"));
+
+        System.out.println("################### Boolean Retrieval Index ####################");
+
+        // Boolean Retrieval Queries using Standalone Index
+        System.out.println("# Q: market AND sports");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market AND sports"));
+
+        System.out.println("# Q: weather AND warming");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("weather AND warming"));
+
+        System.out.println("# Q: business AND world");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("business AND world"));
+
+        System.out.println("# Q: weather OR warming");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("weather OR warming"));
+
+        System.out.println("# Q: market OR sports");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market OR sports"));
+
+        System.out.println("# Q: market OR sports AND warming");
+        queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market OR sports AND warming"));
 
         System.out.println("################## Ranked Retrieval ###########################");
 
