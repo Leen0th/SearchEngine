@@ -1,6 +1,7 @@
 public class QueryProcessing {
     public InvertedIndex inverted;
     public InvertedIndexBST invertedBST;
+    public Index index;
 
     public QueryProcessing(InvertedIndexBST invertedBST) {
         this.invertedBST = invertedBST;
@@ -10,10 +11,68 @@ public class QueryProcessing {
         this.inverted = inverted;
     }
 
+    public QueryProcessing(Index index) {
+        this.index = index;
+    }
+
     // Constructor to initialize the inverted index objects
     public QueryProcessing() {
         this.inverted = new InvertedIndex();
         this.invertedBST = new InvertedIndexBST();
+        this.index = new Index();
+    }
+
+    // Public method to process a query with AND and OR for Index (LinkedList-based)
+    public LinkedList<Integer> processQueryWithIndex(String query) {
+        // Split the query by "OR" first
+        String[] orTerms = query.split("OR");
+
+        LinkedList<Integer> result = new LinkedList<>();
+
+        for (String orTerm : orTerms) {
+            orTerm = orTerm.trim();
+            LinkedList<Integer> andResult = processAndQueryWithIndex(orTerm);
+
+            // Add unique results to the final result
+            andResult.findfirst();
+            Integer docID = andResult.retrieve();
+            while (docID != null) {
+                if (!result.search(docID)) {
+                    result.insert(docID);
+                }
+                if (!andResult.last()) {
+                    andResult.findnext();
+                    docID = andResult.retrieve();
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private LinkedList<Integer> processAndQueryWithIndex(String andQuery) {
+        String[] terms = andQuery.split("AND");
+        LinkedList<Integer> result = new LinkedList<>();
+
+        if (terms.length == 0) return result;
+
+        LinkedList<Integer> firstTermDocIDs = index.getDocumentIDs(terms[0].trim().toLowerCase());
+        if (firstTermDocIDs == null) return result;
+
+        result = firstTermDocIDs;
+
+        for (int i = 1; i < terms.length; i++) {
+            String term = terms[i].trim().toLowerCase();
+            LinkedList<Integer> termDocIDs = index.getDocumentIDs(term);
+            if (termDocIDs == null) {
+                return new LinkedList<>(); // Return empty if any term has no documents
+            }
+            result = ANDQuery(result, termDocIDs);
+        }
+
+        return result;
     }
 
     // Public method to process a query with AND and OR, respecting precedence
