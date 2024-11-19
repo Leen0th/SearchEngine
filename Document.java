@@ -1,12 +1,14 @@
 public class Document {
-    int documentID;
-    LinkedList<Word> index;
+    int documentID; // the ID of the document 
+    LinkedList<Word> index; // the list of terms related to that ID
 
+    // Default constructor that initializes an empty document
     public Document() {
         documentID = 0;
         index = new LinkedList<Word>();
     }
 
+    // Constructor that initializes the document with an ID and an array of words
     public Document(int id, String[] words) {
         documentID = id;
         index = new LinkedList<Word>();
@@ -15,39 +17,44 @@ public class Document {
         }
     }
 
+    // Method to add a word to the document's index
     public void addWord(String word) {
         index.insert(new Word(new LinkedList<>(), word));
     }
 
+    // Method to check if a specific word exists in the document's index
     public boolean findWord(String word) {
         if (index.empty()) {
-            return false; // List is empty, so word cannot be found
+            return false; 
         }
 
-        index.findfirst(); // Start from the head of the LinkedList
+        index.findfirst(); 
+        
         do {
-            // Retrieve the current Word object and check its word
             if (index.retrieve().getWord().equals(word)) {
-                return true; // Word found
+                return true; 
             }
-            index.findnext(); // Move to the next Word in the list
-        } while (!index.last()); // Continue until we reach the end of the list
-    if(index.last()){
-        if (index.retrieve().getWord().equals(word)) {
-            return true; // Word found
+            index.findnext(); 
+        } while (!index.last()); 
+
+        if(index.last()){
+            if (index.retrieve().getWord().equals(word)) {
+                return true; 
+            }
         }
-    
-    }
-        return false; // Word not found
+
+        return false; 
     }
 
+    // Method to get the document's ID
     public int getId() {
         return documentID;
     }
 
+    // Method to get the document's content as a single string
     public String getDocumentContent() {
         if (index.empty()) {
-            return ""; // Empty document
+            return ""; 
         }
     
         StringBuilder content = new StringBuilder();
@@ -61,32 +68,30 @@ public class Document {
         content.append(index.retrieve().getWord());
         return content.toString().trim();
     }
+
+    // Method to count the number of occurrences of a specific word in the document
     public int countTermOccurrences(String word) {
-        int count = 0; // Initialize a count variable
+        int count = 0; 
     
-        // Check if the index is empty
         if (index.empty()) {
-            return count; // Return 0 if the document has no words
+            return count; 
         }
     
-        index.findfirst(); // Start from the head of the linked list
+        index.findfirst(); 
     
-        // Iterate through the linked list of words
         do {
-            // Check if the current word matches the input word
             if (index.retrieve().getWord().equals(word)) {
-                count++; // Increment the count if a match is found
+                count++; 
             }
-            index.findnext(); // Move to the next word
-        } while (!index.last()); // Continue until we reach the end of the list
+            index.findnext(); 
+        } while (!index.last()); 
     
-        // Check the last element (if necessary)
         if (index.last()) {
             if (index.retrieve().getWord().equals(word)) {
-                count++; // Increment count for the last word if it matches
+                count++; 
             }
         }
     
-        return count; // Return the total count of occurrences
+        return count; 
     }
 }
