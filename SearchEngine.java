@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-// The SearchEngine class handles indexing and searching documents based on user queries.
 public class SearchEngine {
     int tokens = 0;
     int vocap = 0;
@@ -12,58 +11,92 @@ public class SearchEngine {
     InvertedIndex invertedindex;
     InvertedIndexBST invertedindexBST;
     InvertedIndexBST invertedindexBSTvocab;
-    Index index; 
+    Index index; // Add an Index instance
+    AVL<Word> avl; // Add an AVL instance for Word objects
     Ranking ranking;
 
-    // Constructor initializes the search engine components.
     public SearchEngine() {
         this.stopWords = new LinkedList<>();
         this.invertedindex = new InvertedIndex();
         this.invertedindexBST = new InvertedIndexBST();
-        this.index = new Index(); 
+        this.index = new Index(); // Initialize the Index
         this.invertedindexBSTvocab = new InvertedIndexBST();
+        this.avl = new AVL<>(); // Initialize the AVL tree
     }
 
-    // The Data method loads stop words and processes documents to build the index.
     public void Data(String stopFile, String fileName) {
         try {
+            // Load stop words into the instance variable
             stopWords = loadStopWords(stopFile);
+            
+            // Read the document file using BufferedReader
             File docsfile = new File(fileName);
             try (BufferedReader docReader = new BufferedReader(new FileReader(docsfile))) {
-                docReader.readLine(); 
+                // Skip the first line (if necessary)
+                docReader.readLine(); // Read the header line
                 
                 String line;
-                int lineCount = 0;
+                int lineCount = 0; // Counter for processed lines
 
-                while (lineCount < 50 && (line = docReader.readLine()) != null) {
-                    lineCount++;
-                    line = line.toLowerCase().replaceAll("[\"]", "");
+                // Process the document file
+                while (lineCount < 50) {
+                    line = docReader.readLine();
+                    lineCount++; // Increment line count here
+
+                    // Convert to lowercase and handle potential formatting issues
+                    line = line.toLowerCase().replaceAll("[\"]", ""); // Remove quotes
+
+                    // Find the first comma
                     int firstCommaIndex = line.indexOf(',');
                     if (firstCommaIndex != -1) {
-                        int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim());
-                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\'", "").replaceAll("-", " ").replaceAll("[^a-zA-Z0-9]", " ").trim();
-                        String[] words = text.split("\\s+");
-                        tokens += words.length;
+                        // Extract the docId from the first cell
+                        int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim()); // Parse the first cell as docId
+                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\"", "").trim(); // Extract the content after the first comma
+                        text = text.replaceAll("-", " ").trim();
+                        text = text.replaceAll("[^a-zA-Z0-9]", " ").trim();
 
+                        // Split the text into words
+                        String[] words = text.split("[\\s]+"); // Split by one or more whitespace characters
+
+                        // Prepare to collect words for this document
                         String[] cleanedWords = new String[1600];
                         int indexCounter = 0;
 
+                        // Process each word
                         for (String word : words) {
-                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", "").trim();
-                            if (!cleanedWord.isEmpty()) {
-                                this.invertedindexBSTvocab.add(cleanedWord, docId);
-                                if (!isStopWord(cleanedWord)) {
-                                    this.invertedindex.add(cleanedWord, docId);
-                                    this.invertedindexBST.add(cleanedWord, docId);
-                                    cleanedWords[indexCounter++] = cleanedWord;
+                            String cleanedWord = word.replaceAll("[^a-zA-Z0-9]", " ").trim(); // Clean the word
+
+                            // Count tokens (every valid word)
+                            tokens++; // Increment token count for every word
+                            this.invertedindexBSTvocab.add(cleanedWord, docId);
+
+                            // Check if the cleaned word is valid (not a stop word)
+                            if (!cleanedWord.isEmpty() && !isStopWord(cleanedWord)) {
+                                // Add to the inverted index
+                                this.invertedindex.add(cleanedWord, docId); // Add to the inverted index
+                                this.invertedindexBST.add(cleanedWord, docId);
+
+                                // Add to AVL
+                                Word wordObj = avl.search(cleanedWord.hashCode());
+                                if (wordObj == null) {
+                                    wordObj = new Word();
+                                    wordObj.word = cleanedWord;
+                                    avl.insert(cleanedWord.hashCode(), wordObj);
                                 }
+                                wordObj.addDoc(docId);
+
+                                // Store valid cleaned words for the document
+                                cleanedWords[indexCounter++] = cleanedWord;
                             }
                         }
 
+                        // Add all cleaned words to the index
                         index.addAllDocument(docId, cleanedWords);
                     }
                 }
 
+                // Update the vocabulary count
+                vocap = invertedindexBSTvocab.size();
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
@@ -72,23 +105,18 @@ public class SearchEngine {
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
         }
-        
-        int s = invertedindexBSTvocab.size();
-        vocap = s;
-        System.out.println("Total tokens: " + tokens);
-        System.out.println("Total vocap: " + vocap);
     }
 
-    // The loadStopWords method reads stop words from a file and returns them as a LinkedList.
+    // Load stop words from the file into a String array
     private LinkedList<String> loadStopWords(String stopFile) {
-        LinkedList<String> stopWordsList = new LinkedList<>();
+        LinkedList<String> stopWordsList = new LinkedList<String>();
 
         try (BufferedReader stopReader = new BufferedReader(new FileReader(stopFile))) {
             String stopWord;
             while ((stopWord = stopReader.readLine()) != null) {
                 String trimmedWord = stopWord.trim();
-                if (!trimmedWord.isEmpty()) {
-                    stopWordsList.insert(trimmedWord.toLowerCase());
+                if (!trimmedWord.isEmpty()) { // Add only non-empty words
+                    stopWordsList.insert(trimmedWord.toLowerCase()); // Convert to lowercase if needed
                 }
             }
         } catch (FileNotFoundException e) {
@@ -97,26 +125,25 @@ public class SearchEngine {
             System.out.println("Error reading stop words file: " + e.getMessage());
         }
 
-        return stopWordsList; 
+        return stopWordsList; // Return the LinkedList
     }
 
-    // The isStopWord method checks if a given word is in the list of stop words.
     private boolean isStopWord(String word) {
-        if (stopWords.empty()) return false;
-        stopWords.findfirst();
+        if (stopWords.empty()) return false; // Early return if the list is empty
+        stopWords.findfirst(); // Start from the head of the list
         do {
             if (stopWords.retrieve().equals(word)) {
-                return true;
+                return true; // Found a match
             }
-            stopWords.findnext();
-        } while (!stopWords.last());
+            stopWords.findnext(); // Move to the next node
+        } while (!stopWords.last()); // Loop until the last node
+        // Check the last word separately
         if (!stopWords.empty() && stopWords.retrieve().equals(word)) {
             return true;
         }
-        return false; 
+        return false; // Not found
     }
 
-    // The searchAndRank method executes a search query and ranks the results.
     public void searchAndRank(String query) {
         this.ranking = new Ranking(invertedindexBST, index);
         ranking.rank_query(query);
