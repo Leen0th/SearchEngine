@@ -1,12 +1,12 @@
 public class AVL<T> {
 
     private class AVLNode {
-        int key;
+        String key; // Change key type from int to String
         T data;
-        int balance;
+        int balance; // Balance factor
         AVLNode left, right;
 
-        AVLNode(int key, T data) {
+        AVLNode(String key, T data) {
             this.key = key;
             this.data = data;
             this.balance = 0; 
@@ -16,7 +16,7 @@ public class AVL<T> {
 
     private AVLNode root;
 
-    // Method to calculate the height(longest path from the node to a leaf) of a node
+    // Method to calculate the height (longest path from the node to a leaf) of a node
     private int height(AVLNode node) {
         return node == null ? 0 : Math.max(height(node.left), height(node.right)) + 1;
     }
@@ -26,7 +26,7 @@ public class AVL<T> {
         return node == null ? 0 : height(node.right) - height(node.left);
     }
 
-    // Method to perform a right rotation (to restore balance when its left-heavy)
+    // Method to perform a right rotation (to restore balance when it's left-heavy)
     private AVLNode rotateRight(AVLNode y) {
         AVLNode x = y.left;
         AVLNode T2 = x.right;
@@ -40,7 +40,7 @@ public class AVL<T> {
         return x;
     }
 
-    // Method to perform a left rotation (to restore balance when its right-heavy)
+    // Method to perform a left rotation (to restore balance when it's right-heavy)
     private AVLNode rotateLeft(AVLNode x) {
         AVLNode y = x.right;
         AVLNode T2 = y.left;
@@ -55,44 +55,45 @@ public class AVL<T> {
     }
 
     // Public method to insert a key-value pair into the AVL tree
-    public void insert(int key, T data) {
+    public void insert(String key, T data) {
         root = insert(root, key, data);
     }
 
     // Recursive method to insert a key-value pair
-    private AVLNode insert(AVLNode node, int key, T data) {
+    private AVLNode insert(AVLNode node, String key, T data) {
         if (node == null) {
             return new AVLNode(key, data);
         }
 
-        if (key < node.key) {
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
             node.left = insert(node.left, key, data);
-        } else if (key > node.key) {
+        } else if (cmp > 0) {
             node.right = insert(node.right, key, data);
         } else {
-            return node; 
+            return node; // Duplicate keys are not allowed
         }
 
         node.balance = getBalance(node);
 
         // Left-Left Case
-        if (node.balance < -1 && key < node.left.key) {
+        if (node.balance < -1 && key.compareTo(node.left.key) < 0) {
             return rotateRight(node);
         }
 
         // Right-Right Case
-        if (node.balance > 1 && key > node.right.key) {
+        if (node.balance > 1 && key.compareTo(node.right.key) > 0) {
             return rotateLeft(node);
         }
 
         // Left-Right Case
-        if (node.balance < -1 && key > node.left.key) {
+        if (node.balance < -1 && key.compareTo(node.left.key) > 0) {
             node.left = rotateLeft(node.left);
             return rotateRight(node);
         }
 
         // Right-Left Case
-        if (node.balance > 1 && key < node.right.key) {
+        if (node.balance > 1 && key.compareTo(node.right.key) < 0) {
             node.right = rotateRight(node.right);
             return rotateLeft(node);
         }
@@ -101,18 +102,19 @@ public class AVL<T> {
     }
 
     // Public method to search for a node by key
-    public T search(int key) {
+    public T search(String key) {
         AVLNode node = search(root, key);
         return node != null ? node.data : null;
     }
 
     // Recursive method to search for a node by key
-    private AVLNode search(AVLNode node, int key) {
-        if (node == null || node.key == key) {
+    private AVLNode search(AVLNode node, String key) {
+        if (node == null || node.key.equals(key)) {
             return node;
         }
 
-        if (key < node.key) {
+        int cmp = key.compareTo(node.key);
+        if (cmp < 0) {
             return search(node.left, key);
         } else {
             return search(node.right, key);
