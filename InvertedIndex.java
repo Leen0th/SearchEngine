@@ -1,108 +1,88 @@
 public class InvertedIndex {
     private LinkedList<Word> index;
 
-    // Constructor
     public InvertedIndex() {
         index = new LinkedList<>();
     }
 
-    // Checks if a word is in the Inverted Index
+    // Checks if a word exists in the inverted index
     public boolean containsWord(String word) {
         index.findfirst();
-
         while (index.retrieve() != null) {
-
             Word currentWord = index.retrieve();
-
             if (currentWord.getWord().equals(word)) {
-                return true; // Word found
+                return true; 
             }
-
             if (!index.last()) {
                 index.findnext();
             } else {
                 break;
             }
         }
-
-        return false; // Word not found
+        return false; 
     }
 
-    // Retrieves the document IDs associated with a word, or returns null if the word is not found
+    // Retrieves the document IDs associated with a given word
     public LinkedList<Integer> getDocumentIDsForWord(String word) {
         index.findfirst();
-
         while (index.retrieve() != null) {
             Word currentWord = index.retrieve();
-
             if (currentWord.getWord().equals(word)) {
-                return currentWord.getDocIDs(); // Return the list of document IDs
+                return currentWord.getDocIDs(); 
             }
-
             if (!index.last()) {
                 index.findnext();
             } else {
                 break;
             }
         }
-
-        return null; // Word not found
+        return null;
     }
 
-    // Adds the word and doc ID if not exists, or adds only the doc ID if the word exists
+    // Adds a word and its associated document ID to the index
     public void add(String word1, int docId) {
-        String word = word1.toLowerCase(); // Normalize to lowercase for consistency
-    
-        // If the index is empty, create a new Word entry directly
+        String word = word1.toLowerCase(); 
         if (index.empty()) {
             Word newWord = new Word();
             newWord.word = word;
             newWord.addDoc(docId);
-            index.insert(newWord); 
-            
+            index.insert(newWord);
             return;
         }
-    
+
         index.findfirst();
         boolean found = false;
-    
-        // Iterate through the index to find the word
         while (index.retrieve() != null) {
             Word currentWord = index.retrieve();
             if (currentWord.getWord().equals(word)) {
-                // If the word exists, check for the document ID
-                if (currentWord.getDocIDs().search(docId) == false) { // Assuming getDocIDs returns a collection
-                    currentWord.addDoc(docId); // Add doc ID if it doesn't already exist
-                  
-                } 
+                if (!currentWord.getDocIDs().search(docId)) {
+                    currentWord.addDoc(docId); 
+                }
                 found = true;
-                break; // Exit the loop since the word was found
+                break; 
             }
-    
-            // Move to the next word in the index
             if (!index.last()) {
                 index.findnext();
             } else {
-                break; // Exit if at the last item
+                break; 
             }
         }
-    
-        // If the word was not found, create a new Word entry
+
         if (!found) {
             Word newWord = new Word();
             newWord.word = word;
-            newWord.addDoc(docId); 
+            newWord.addDoc(docId);
             index.insert(newWord);
-            
         }
     }
-    // Display the Inverted Index
+
+    // Displays the contents of the inverted index
     public void displayInvertedIndex() {
         index.findfirst();
         while (index.retrieve() != null) {
             Word currentWord = index.retrieve();
             System.out.print("Word: " + currentWord.getWord() + ", Doc IDs: ");
-            currentWord.docIDs.display(); // Ensure this method correctly displays the doc IDs
+            currentWord.docIDs.display(); 
             if (!index.last()) {
                 index.findnext();
             } else {
@@ -110,6 +90,4 @@ public class InvertedIndex {
             }
         }
     }
-
-   
 }
