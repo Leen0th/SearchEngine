@@ -1,5 +1,4 @@
 public class test {
-
     // Declare the SearchEngine instance at the class level
     public static SearchEngine SE = new SearchEngine();
 
@@ -7,10 +6,12 @@ public class test {
         // Load the dataset and stop words
         SE.Data("dataset/stop.txt", "dataset/dataset.csv");
 
-        // Query for LinkedList-based inverted index
+        // QueryProcessing for different data structures
         QueryProcessing queryProcessing = new QueryProcessing(SE.invertedindex);
         QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
-        QueryProcessing queryProcessingIndex = new QueryProcessing(SE.index); // QueryProcessing for Index
+        QueryProcessing queryProcessingIndex = new QueryProcessing(SE.index); 
+        QueryProcessing queryProcessingAVL = new QueryProcessing(SE.avl); 
+
 
         // Initialize Ranking with InvertedIndexBST and Index
         Ranking ranking = new Ranking(SE.invertedindexBST, SE.index);
@@ -61,7 +62,7 @@ public class test {
         System.out.println();
         System.out.println("################### Boolean Retrieval Index ####################");
 
-        // Boolean Retrieval Queries using Standalone Index
+        // Boolean Retrieval Queries using Index
         System.out.println("# Q: market AND sports");
         queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market AND sports"));
 
@@ -79,6 +80,28 @@ public class test {
 
         System.out.println("# Q: market OR sports AND warming");
         queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market OR sports AND warming"));
+
+        System.out.println();
+        System.out.println("################### Boolean Retrieval AVL ####################");
+
+        // Boolean Retrieval Queries using AVL
+        System.out.println("# Q: market AND sports");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market AND sports"));
+
+        System.out.println("# Q: weather AND warming");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("weather AND warming"));
+
+        System.out.println("# Q: business AND world");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("business AND world"));
+
+        System.out.println("# Q: weather OR warming");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("weather OR warming"));
+
+        System.out.println("# Q: market OR sports");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market OR sports"));
+
+        System.out.println("# Q: market OR sports AND warming");
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market OR sports AND warming"));
 
         System.out.println();
         System.out.println("################## Ranked Retrieval ###########################");

@@ -2,6 +2,7 @@ public class QueryProcessing {
     public InvertedIndex inverted;
     public InvertedIndexBST invertedBST;
     public Index index;
+    public AVL<Word> avl;
 
     // Constructor for BST-based query processing
     public QueryProcessing(InvertedIndexBST invertedBST) {
@@ -18,6 +19,11 @@ public class QueryProcessing {
         this.index = index;
     }
 
+    // Constructor for AVL-based query processing
+    public QueryProcessing(AVL<Word> avl) {
+        this.avl = avl;
+    }
+
     // Method to process a query using the appropriate data structure
     public LinkedList<Integer> processQuery(String query) {
         if (index != null) {
@@ -26,6 +32,8 @@ public class QueryProcessing {
             return processQueryWithInverted(query);
         } else if (invertedBST != null) {
             return processQueryWithBST(query);
+        } else if(avl != null){
+            return processQueryWithAVL(query);
         } else {
             throw new IllegalStateException("No valid data structure initialized for query processing.");
         }
@@ -143,6 +151,50 @@ public class QueryProcessing {
         }
 
         return result;
+    }
+
+    // Method to process a query (contains AND, OR) using the AVL tree
+    public LinkedList<Integer> processQueryWithAVL(String query) {
+        String[] orTerms = query.split("OR");
+        LinkedList<Integer> result = new LinkedList<>();
+
+        for (String orTerm : orTerms) {
+            orTerm = orTerm.trim();
+            LinkedList<Integer> andResult = processAndQueryWithAVL(orTerm);
+            result = ORQuery(result, andResult);
+        }
+
+        return result;
+    }
+
+    // Helper method to process AND queries using the AVL tree
+    private LinkedList<Integer> processAndQueryWithAVL(String andQuery) {
+        String[] terms = andQuery.split("AND");
+        LinkedList<Integer> result = new LinkedList<>();
+
+        if (terms.length == 0) return result;
+
+        LinkedList<Integer> firstTermDocIDs = getDocumentIDsFromAVL(terms[0].trim().toLowerCase());
+        if (firstTermDocIDs == null) return result;
+
+        result = firstTermDocIDs;
+
+        for (int i = 1; i < terms.length; i++) {
+            String term = terms[i].trim().toLowerCase();
+            LinkedList<Integer> termDocIDs = getDocumentIDsFromAVL(term);
+            if (termDocIDs == null) {
+                return new LinkedList<>();
+            }
+            result = ANDQuery(result, termDocIDs);
+        }
+
+        return result;
+    }
+
+    // Helper method to retrieve document IDs for a word from the AVL tree
+    private LinkedList<Integer> getDocumentIDsFromAVL(String word) {
+        Word wordObj = avl.search(word.hashCode()); 
+        return wordObj != null ? wordObj.getDocIDs() : new LinkedList<>(); 
     }
 
     // Method to perform an AND operation on two sets of document IDs
