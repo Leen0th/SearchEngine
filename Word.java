@@ -35,7 +35,7 @@ public class Word {
     // Method to represent the Word object as a string
     @Override
     public String toString() {
-    String docs=docIDs.displaydocs();
+    String docs=docIDs.displayDocs();
 
         return word+"\nducment id : "+docs+"\n";
     }
