@@ -1,44 +1,41 @@
 public class InvertedIndexBST {
-    private BST<Word> index; // Using BST instead of LinkedList
-    private int size=0;
+    private BST<Word> index; 
+    private int size = 0;
 
+    // Returns the number of unique words in the inverted index.
     public int size() {
         return size;
     }
-    // Constructor
+
+    // Initializes the inverted index as an empty BST.
     public InvertedIndexBST() {
-        index = new BST<>(); // Initialize the BST
+        index = new BST<>(); 
     }
 
-    // Checks if a word is in the Inverted Index
+    // Checks if a specified word is present in the inverted index.
     public boolean containsWord(String word) {
-        return index.findkey(word); // Use BST's find method
+        return index.findkey(word); 
     }
 
-    // Adds the word and doc ID if not exists, or adds only the doc ID if the word exists
+    // Adds a word and its associated document ID to the index.
+    // If the word already exists, adds the document ID to the existing entry.
     public void add(String word1, int docId) {
-        String word = word1.toLowerCase(); // Normalize to lowercase for consistency
+        String word = word1.toLowerCase(); 
 
-        // If the index is empty, create a new Word entry directly
         if (index.empty()) {
             Word newWord = new Word();
             newWord.word = word;
             newWord.addDoc(docId);
             index.insert(word, newWord);
-            
             return;
         }
 
-        // Check if the word exists in the BST
         if (index.findkey(word)) {
-            Word existingWord = index.retrieve(); // Get the existing Word object
-            if (existingWord.searchDocId(docId) == false) { // Check if doc ID exists
-                existingWord.addDoc(docId); // Add doc ID if it doesn't already exist
-                
+            Word existingWord = index.retrieve(); 
+            if (!existingWord.searchDocId(docId)) { 
+                existingWord.addDoc(docId); 
             }
-            
         } else {
-            // If the word was not found, create a new Word entry
             Word newWord = new Word();
             newWord.word = word;
             newWord.addDoc(docId);
@@ -47,24 +44,20 @@ public class InvertedIndexBST {
         }
     }
 
-    // Display the Inverted Index
+    // Displays all words in the inverted index along with their associated document IDs.
     public void displayInvertedIndex() {
-        index.inOrder(); // Traverse the BST to display words and their document IDs
+        index.inOrder(); 
     }
 
+    // Retrieves the list of document IDs associated with a specified word.
+    // Returns null if the word is not found.
     public LinkedList<Integer> getDocumentIDsForWord(String word) {
-        index.findkey(word);
-
-        while (index.retrieve() != null) {
+        if (index.findkey(word)) {
             Word currentWord = index.retrieve();
-
             if (currentWord.getWord().equals(word)) {
-                return currentWord.getDocIDs(); // Return the list of document IDs
+                return currentWord.getDocIDs(); 
             }
-
-            
         }
-
-        return null; // Word not found
+        return null; 
     }
 }
