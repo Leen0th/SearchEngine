@@ -36,6 +36,7 @@ public class test {
         System.out.println("# Q: market OR sports AND warming");
         queryProcessing.displayResult(queryProcessing.processQuery("market OR sports AND warming"));
 
+        System.out.println();
         System.out.println("################### Boolean Retrieval Inverted index BST ####################");
 
         // Boolean Retrieval Queries using BST
@@ -57,6 +58,7 @@ public class test {
         System.out.println("# Q: market OR sports AND warming");
         queryProcessingBST.displayResult(queryProcessingBST.processQueryWithBST("market OR sports AND warming"));
 
+        System.out.println();
         System.out.println("################### Boolean Retrieval Index ####################");
 
         // Boolean Retrieval Queries using Standalone Index
@@ -78,6 +80,7 @@ public class test {
         System.out.println("# Q: market OR sports AND warming");
         queryProcessingIndex.displayResult(queryProcessingIndex.processQueryWithIndex("market OR sports AND warming"));
 
+        System.out.println();
         System.out.println("################## Ranked Retrieval ###########################");
 
         // Ranked Retrieval Queries
