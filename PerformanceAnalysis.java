@@ -6,9 +6,9 @@ public class PerformanceAnalysis {
         QueryProcessing queryIndex = new QueryProcessing(SE.index);
         QueryProcessing queryInverted = new QueryProcessing(SE.invertedindex);
         QueryProcessing queryBST = new QueryProcessing(SE.invertedindexBST);
-        QueryProcessing queryAVL = new QueryProcessing(SE.avl);
+        QueryProcessing queryAVL = new QueryProcessing(SE.invertedIndexAVL);
 
-        String[] queries = {
+        String[] booleanQueries = {
             "market AND sports",
             "weather AND warming",
             "business AND world",
@@ -17,39 +17,43 @@ public class PerformanceAnalysis {
             "market OR sports AND warming"
         };
 
+
+
         System.out.println("Total tokens: " + SE.tokens);
-        System.out.println("Total vocap: " + SE.vocap);
+        System.out.println("Total vocab: " + SE.vocap);
 
         System.out.println("################### Performance Analysis ####################\n");
 
-        for (String query : queries) {
+        // Boolean Retrieval Performance
+        for (String query : booleanQueries) {
             System.out.println("Query: \"" + query + "\"");
 
             // Measure performance for Index
             long start = System.nanoTime();
-            LinkedList<Integer> resultIndex = queryIndex.processQueryWithIndex(query);
+            queryIndex.processQueryWithIndex(query);
             long end = System.nanoTime();
-            System.out.println("- Index Retrieval (using list of lists): Result: " + resultIndex.displayDocs() + " | Time: " + (end - start) + " ns");
+            System.out.printf("- Index Retrieval (using list of lists): Time: %.2f ms%n", (end - start) / 1_000_000.0);
 
             // Measure performance for Inverted Index
             start = System.nanoTime();
-            LinkedList<Integer> resultInverted = queryInverted.processQueryWithInverted(query);
+            queryInverted.processQueryWithInverted(query);
             end = System.nanoTime();
-            System.out.println("- Inverted Index Retrieval (using list of lists): Result: " + resultInverted.displayDocs() + " | Time: " + (end - start) + " ns");
+            System.out.printf("- Inverted Index Retrieval (using list of lists): Time: %.2f ms%n", (end - start) / 1_000_000.0);
 
             // Measure performance for Inverted Index BST
             start = System.nanoTime();
-            LinkedList<Integer> resultBST = queryBST.processQueryWithBST(query);
+            queryBST.processQueryWithBST(query);
             end = System.nanoTime();
-            System.out.println("- Inverted Index Retrieval (using BST): Result: " + resultBST.displayDocs() + " | Time: " + (end - start) + " ns");
+            System.out.printf("- Inverted Index Retrieval (using BST): Time: %.2f ms%n", (end - start) / 1_000_000.0);
 
             // Measure performance for AVL
             start = System.nanoTime();
-            LinkedList<Integer> resultAVL = queryAVL.processQueryWithAVL(query);
+            queryAVL.processQueryWithInvertedAVL(query);
             end = System.nanoTime();
-            System.out.println("- Inverted Index Retrieval (using AVL): Result: " + resultAVL.displayDocs() + " | Time: " + (end - start) + " ns");
+            System.out.printf("- Inverted Index Retrieval (using AVL): Time: %.2f ms%n", (end - start) / 1_000_000.0);
 
             System.out.println();
         }
+
     }
 }
