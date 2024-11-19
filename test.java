@@ -10,7 +10,7 @@ public class test {
         QueryProcessing queryProcessing = new QueryProcessing(SE.invertedindex);
         QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
         QueryProcessing queryProcessingIndex = new QueryProcessing(SE.index); 
-        QueryProcessing queryProcessingAVL = new QueryProcessing(SE.avl); 
+        QueryProcessing queryProcessingAVL = new QueryProcessing(SE.invertedIndexAVL); 
 
 
         // Initialize Ranking with InvertedIndexBST and Index
@@ -86,22 +86,22 @@ public class test {
 
         // Boolean Retrieval Queries using AVL
         System.out.println("# Q: market AND sports");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market AND sports"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("market AND sports"));
 
         System.out.println("# Q: weather AND warming");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("weather AND warming"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("weather AND warming"));
 
         System.out.println("# Q: business AND world");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("business AND world"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("business AND world"));
 
         System.out.println("# Q: weather OR warming");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("weather OR warming"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("weather OR warming"));
 
         System.out.println("# Q: market OR sports");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market OR sports"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("market OR sports"));
 
         System.out.println("# Q: market OR sports AND warming");
-        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithAVL("market OR sports AND warming"));
+        queryProcessingAVL.displayResult(queryProcessingAVL.processQueryWithInvertedAVL("market OR sports AND warming"));
 
         System.out.println();
         System.out.println("################## Ranked Retrieval ###########################");
