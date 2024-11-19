@@ -67,8 +67,7 @@ public class SearchEngine {
                 }
 
                 vocap = invertedindexBSTvocab.size();
-                System.out.println("Total tokens: " + tokens);
-                System.out.println("Total vocap: " + vocap);
+                
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
