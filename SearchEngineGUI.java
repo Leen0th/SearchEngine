@@ -17,8 +17,8 @@ public class SearchEngineGUI {
     public SearchEngineGUI() {
         // Load dataset and stop words
         SE.Data(
-            "C:\\Users\\renad\\OneDrive\\المستندات\\NetBeansProjects\\DSSProject1\\src\\main\\java\\rand\\dssproject1\\dataset\\stop.txt",
-            "C:\\Users\\renad\\OneDrive\\المستندات\\NetBeansProjects\\DSSProject1\\src\\main\\java\\rand\\dssproject1\\dataset\\dataset.csv"
+            "dataset/stop.txt",
+            "dataset/dataset.csv"
         );
 
         // Main frame setup
