@@ -13,7 +13,7 @@ public class SearchEngine {
     InvertedIndexBST invertedindexBSTvocab;
     Index index; 
     InvertedIndexAVL invertedIndexAVL; 
-    Ranking ranking;
+    
 
     public SearchEngine() {
         this.stopWords = new LinkedList<>();
