@@ -12,15 +12,14 @@ public class SearchEngineGUI {
     private static final QueryProcessing queryProcessingIndex = new QueryProcessing(SE.index);
     private static final QueryProcessing queryProcessing = new QueryProcessing(SE.invertedindex);
     private static final QueryProcessing queryProcessingBST = new QueryProcessing(SE.invertedindexBST);
+    private static final QueryProcessing queryProcessingAVL = new QueryProcessing(SE.invertedIndexAVL);
+
     private static final Ranking ranking = new Ranking(SE.invertedindexBST, SE.index);
 
     public SearchEngineGUI() {
         // Load dataset and stop words
-        SE.Data(
-            "dataset/stop.txt",
-            "dataset/dataset.csv"
-        );
-
+     SE.Data("dataset/stop.txt",
+            "dataset/dataset.csv");
         // Main frame setup
         frame = new JFrame("Modern SearchEngine");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,7 +50,6 @@ public class SearchEngineGUI {
         tokenArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
         tokenArea.setBackground(new Color(220, 220, 220)); 
         tokenArea.setText("Total Tokens: " + SE.tokens); 
-        tokenArea.setMargin(new Insets(10, 10, 10, 10));
         JScrollPane tokenScroll = new JScrollPane(tokenArea);
 
         // Vocabulary Area 
@@ -60,7 +58,6 @@ public class SearchEngineGUI {
         vocabArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
         vocabArea.setBackground(new Color(220, 220, 220)); 
         vocabArea.setText("Total Vocabulary Size: " + SE.vocap); 
-        vocabArea.setMargin(new Insets(10, 10, 10, 10));
         JScrollPane vocabScroll = new JScrollPane(vocabArea);
 
         topPanel.add(tokenScroll);
@@ -127,29 +124,25 @@ public class SearchEngineGUI {
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Sans Serif", Font.BOLD, 16)); 
-        button.setBackground(new Color(220, 220, 220)); 
-        button.setForeground(new Color(34, 45, 65)); 
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(180, 180, 180), 1), 
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
-        button.setFocusPainted(false); 
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setFont(new Font("Arial", Font.PLAIN, 16));
+        button.setBackground(new Color(189, 170, 179)); 
+        button.setForeground(Color.WHITE); 
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setFocusPainted(false);
         return button;
-    }     
+    }
 
     // Action listeners for buttons
     private void retrieveTerm() {
         String query = JOptionPane.showInputDialog(frame, "Enter a term to retrieve:", "Retrieve a Term", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
-            String[] options = {"Index", "InvertedIndex with BST", "InvertedIndex"};
+            String[] options = {"Index", "InvertedIndex with BST", "InvertedIndex","InvertedIndex with AVL"};
             String choice = (String) JOptionPane.showInputDialog(frame, "Select Retrieval Method:", "Retrieve a Term",
                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
             if (choice != null) {
-                outputArea.setText("Query: " + query + "\n\n");
+                outputArea.setText("Query: " + query + "\n");
                 switch (choice) {
                     case "Index" -> {
                         outputArea.append("Results (Index):\n");
@@ -162,23 +155,30 @@ public class SearchEngineGUI {
                     case "InvertedIndex" -> {
                         outputArea.append("Results (InvertedIndex):\n");
                         outputArea.append(queryProcessing.processQuery(query).displayDocs() + "\n");
+                        
                     }
-                }
+                
+                case "InvertedIndex with AVL" -> {
+                        outputArea.append("Results (AVL):\n");
+                        outputArea.append(queryProcessingAVL.processQuery(query).displayDocs() + "\n");
+            }
             }
         }
     }
-
+    }
     private void booleanRetrieval() {
         String query = JOptionPane.showInputDialog(frame, "Enter a Boolean query (e.g., market AND sports):", "Boolean Retrieval", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
-            outputArea.setText("Boolean Query: " + query + "\n\n");
+            outputArea.setText("Boolean Query: " + query + "\n");
             outputArea.append("Results (Index):\n");
             outputArea.append(queryProcessingIndex.processQuery(query).displayDocs() + "\n");
             outputArea.append("\nResults (BST):\n");
             outputArea.append(queryProcessingBST.processQuery(query).displayDocs() + "\n");
             outputArea.append("\nResults (InvertedIndex):\n");
             outputArea.append(queryProcessing.processQuery(query).displayDocs() + "\n");
+            outputArea.append("\nResults (AVL):\n");
+            outputArea.append(queryProcessingAVL.processQuery(query).displayDocs() + "\n");
         }
     }
 
@@ -186,7 +186,7 @@ public class SearchEngineGUI {
         String query = JOptionPane.showInputDialog(frame, "Enter a query for ranked retrieval:", "Ranked Retrieval", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
-            outputArea.setText("Ranked Retrieval Query: " + query + "\n\n");
+            outputArea.setText("Ranked Retrieval Query: " + query + "\n");
             outputArea.append(ranking.rank_query(query) + "\n");
         }
     }
