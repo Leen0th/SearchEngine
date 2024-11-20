@@ -125,13 +125,17 @@ public class SearchEngineGUI {
 
     private JButton createStyledButton(String text) {
         JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.PLAIN, 16));
-        button.setBackground(new Color(189, 170, 179)); 
-        button.setForeground(Color.WHITE); 
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        button.setFocusPainted(false);
+        button.setFont(new Font("Sans Serif", Font.BOLD, 16)); 
+        button.setBackground(new Color(220, 220, 220)); 
+        button.setForeground(new Color(34, 45, 65)); 
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(180, 180, 180), 1), 
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        button.setFocusPainted(false); 
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return button;
-    }
+    }     
 
     // Action listeners for buttons
     private void retrieveTerm() {
