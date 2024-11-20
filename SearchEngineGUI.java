@@ -51,6 +51,7 @@ public class SearchEngineGUI {
         tokenArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
         tokenArea.setBackground(new Color(220, 220, 220)); 
         tokenArea.setText("Total Tokens: " + SE.tokens); 
+        tokenArea.setMargin(new Insets(10, 10, 10, 10));
         JScrollPane tokenScroll = new JScrollPane(tokenArea);
 
         // Vocabulary Area 
@@ -59,6 +60,7 @@ public class SearchEngineGUI {
         vocabArea.setFont(new Font("Monospaced", Font.PLAIN, 16));
         vocabArea.setBackground(new Color(220, 220, 220)); 
         vocabArea.setText("Total Vocabulary Size: " + SE.vocap); 
+        vocabArea.setMargin(new Insets(10, 10, 10, 10));
         JScrollPane vocabScroll = new JScrollPane(vocabArea);
 
         topPanel.add(tokenScroll);
