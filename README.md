@@ -24,7 +24,7 @@ The entire project is implemented without using external libraries or prebuilt d
 - Reads documents from a CSV file.
 - Cleans and tokenizes text:
   - Converts text to lowercase.
-  - Removes punctuation and stop words (like "the", "is", "and").
+  - Removes punctuation and stop words (like "the", "is", "of").
 - Builds both **index** and **inverted index** structures.
 
 ### 🔍 Query Processing
