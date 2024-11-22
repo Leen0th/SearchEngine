@@ -77,17 +77,24 @@ public class InvertedIndex {
     }
 
     // Displays the contents of the inverted index
-    public void displayInvertedIndex() {
+    public String displayInvertedIndexWithCounts() {
+        StringBuilder output = new StringBuilder();
+        output.append("Inverted Index with Counts:\n");
+    
         index.findfirst();
         while (index.retrieve() != null) {
             Word currentWord = index.retrieve();
-            System.out.print("Word: " + currentWord.getWord() + ", Doc IDs: ");
-            currentWord.docIDs.display(); 
+            output.append("Word: ").append(currentWord.getWord())
+                  .append(", Count: ").append(currentWord.docIDs.size())
+                  .append("\n");
+    
             if (!index.last()) {
                 index.findnext();
             } else {
                 break;
             }
         }
+        return output.toString();
     }
+       
 }
