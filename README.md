@@ -61,7 +61,6 @@ The entire project is implemented without using external libraries or prebuilt d
    - Evaluates the time complexity of different indexing methods:
      - **List-based indexing**.
      - **Tree-based indexing (BST and AVL)**.
-     - **AVL Tree-based indexing** 
    
 ---
 
