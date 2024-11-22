@@ -262,27 +262,4 @@ public class QueryProcessing {
 
         return result;
     }
-
-    // Method to display the results of a query
-    public void displayResult(LinkedList<Integer> result) {
-        System.out.print("Result: {");
-        result.findfirst();
-        boolean first = true;
-        Integer docID = result.retrieve();
-        while (docID != null) {
-            if (!first) {
-                System.out.print(", ");
-            }
-            System.out.print(docID);
-            first = false;
-
-            if (!result.last()) {
-                result.findnext();
-                docID = result.retrieve();
-            } else {
-                break;
-            }
-        }
-        System.out.println("}");
-    }
 }
