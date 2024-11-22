@@ -30,12 +30,14 @@ The entire project is implemented without using external libraries or prebuilt d
 ### 🔍 Query Processing
 - **Boolean Retrieval**: Supports queries like `word1 AND word2` or `word1 OR word2`.
 - **Ranked Retrieval**: Scores and ranks documents based on term frequency (TF).
+- **Term Retrieval**: Allows users to retrieve documents containing specific terms efficiently.
 
 ### 📊 Performance
 - Implements and compares indexing methods:
   - **Basic Index** (Lists).
   - **Inverted Index** (Lists of Lists).
   - **BST-enhanced Inverted Index** for faster lookups.
+  - **AVL Tree-based Inverted Index** for optimal search and update efficiency.
 - Provides Big-O analysis to evaluate the efficiency of each method.
 
 ---
@@ -43,28 +45,24 @@ The entire project is implemented without using external libraries or prebuilt d
 ## How it Works
 
 1. **Document Processing**:
-   - Preprocesses text by removing stop words and punctuation, and converting it to lowercase.
-   - Builds the index and inverted index.
+   - Preprocesses text:
+     - Removes stop words and punctuation.
+     - Converts text to lowercase.
+   - Builds two data structures:
+     - **Index**: Maps document IDs to tokens.
+     - **Inverted Index**: Maps tokens to document IDs for efficient term retrieval.
    
 2. **Query Handling**:
-   - Processes **Boolean queries** using set operations (intersection for `AND`, union for `OR`).
-   - Scores and ranks results for **Ranked Retrieval** using Term Frequency (TF).
+   - **Term Retrieval**: Retrieves documents containing specific terms.
+   - **Boolean Retrieval**: Processes queries like `word1 AND word2` or `word1 OR word2` using set operations (intersection and union).
+   - **Ranked Retrieval**: Scores documents based on Term Frequency (TF) and ranks them in order of relevance.
 
 3. **Performance Analysis**:
-   - Compares the efficiency of list-based and tree-based indexing structures.
-
----
-
-## Deliverables
-
-- **Index**: Maps documents to words using lists.
-- **Inverted Index**: Maps terms to documents containing those terms.
-- **BST-enhanced Inverted Index**: Optimizes search performance.
-- **Query Processor**: Supports Boolean and Ranked Retrieval.
-- **Ranking**: Implements Term Frequency (TF) for relevance scoring.
-- **Documentation**: Includes design, implementation details, and performance analysis.
-- **Test Menu**: A user-friendly menu for testing the search engine.
-
+   - Evaluates the time complexity of different indexing methods:
+     - **List-based indexing**.
+     - **Tree-based indexing (BST and AVL)**.
+     - **AVL Tree-based indexing** 
+   
 ---
 
 ## Team Members
