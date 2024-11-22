@@ -1,3 +1,4 @@
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -203,7 +204,7 @@ private void printIndexedDocuments() {
     }
 private void printIndexedTokens() {
        
-    String invertedIndexOutput = SE.invertedindex.displayInvertedIndex(); // Call your method from the SearchEngine class
+    String invertedIndexOutput = SE.invertedindex. displayInvertedIndexWithCounts(); // Call your method from the SearchEngine class
     outputArea.setText("IndexedTokens:\n" + invertedIndexOutput);
        }
     
