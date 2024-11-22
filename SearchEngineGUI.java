@@ -68,7 +68,6 @@ public class SearchEngineGUI {
         topPanel.add(tokenScroll);
         topPanel.add(vocabScroll);
 
-        
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3; 
@@ -146,7 +145,7 @@ public class SearchEngineGUI {
         String query = JOptionPane.showInputDialog(frame, "Enter a term to retrieve:", "Retrieve a Term", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
-            String[] options = {"Index", "InvertedIndex with BST", "InvertedIndex","InvertedIndex with AVL"};
+            String[] options = {"Index", "InvertedIndex with BST", "InvertedIndex", "InvertedIndex with AVL"};
             String choice = (String) JOptionPane.showInputDialog(frame, "Select Retrieval Method:", "Retrieve a Term",
                     JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
@@ -155,37 +154,38 @@ public class SearchEngineGUI {
                 switch (choice) {
                     case "Index" -> {
                         outputArea.append("Results (Index):\n");
-                        outputArea.append(queryProcessingIndex.processQuery(query).displayDocs() + "\n");
+                        outputArea.append(formatResult(queryProcessingIndex.processQuery(query)) + "\n");
                     }
                     case "InvertedIndex with BST" -> {
                         outputArea.append("Results (BST):\n");
-                        outputArea.append(queryProcessingBST.processQuery(query).displayDocs() + "\n");
+                        outputArea.append(formatResult(queryProcessingBST.processQuery(query)) + "\n");
                     }
                     case "InvertedIndex" -> {
                         outputArea.append("Results (InvertedIndex):\n");
-                        outputArea.append(queryProcessing.processQuery(query).displayDocs() + "\n");
+                        outputArea.append(formatResult(queryProcessing.processQuery(query)) + "\n");
                     }
-                 case "InvertedIndex with AVL" -> {
+                    case "InvertedIndex with AVL" -> {
                         outputArea.append("Results (AVL):\n");
-                        outputArea.append(queryProcessingAVL.processQuery(query).displayDocs() + "\n");
+                        outputArea.append(formatResult(queryProcessingAVL.processQuery(query)) + "\n");
                     }
+                }
             }
         }
     }
-    }
+
     private void booleanRetrieval() {
         String query = JOptionPane.showInputDialog(frame, "Enter a Boolean query (e.g., market AND sports):", "Boolean Retrieval", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
             outputArea.setText("Boolean Query: " + query + "\n\n");
             outputArea.append("Results (Index):\n");
-            outputArea.append(queryProcessingIndex.processQuery(query).displayDocs() + "\n");
+            outputArea.append(formatResult(queryProcessingIndex.processQuery(query)) + "\n");
             outputArea.append("\nResults (BST):\n");
-            outputArea.append(queryProcessingBST.processQuery(query).displayDocs() + "\n");
+            outputArea.append(formatResult(queryProcessingBST.processQuery(query)) + "\n");
             outputArea.append("\nResults (InvertedIndex):\n");
-            outputArea.append(queryProcessing.processQuery(query).displayDocs() + "\n");
+            outputArea.append(formatResult(queryProcessing.processQuery(query)) + "\n");
             outputArea.append("\nResults (AVL):\n");
-            outputArea.append(queryProcessingAVL.processQuery(query).displayDocs() + "\n");
+            outputArea.append(formatResult(queryProcessingAVL.processQuery(query)) + "\n");
         }
     }
 
@@ -196,6 +196,31 @@ public class SearchEngineGUI {
             outputArea.setText("Ranked Retrieval Query: " + query + "\n\n");
             outputArea.append(ranking.rank_query(query) + "\n");
         }
+    }
+
+    // Method to display the results of a query
+    private String formatResult(LinkedList<Integer> result) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Result: {");
+        result.findfirst();
+        boolean first = true;
+        Integer docID = result.retrieve();
+        while (docID != null) {
+            if (!first) {
+                sb.append(", ");
+            }
+            sb.append(docID);
+            first = false;
+
+            if (!result.last()) {
+                result.findnext();
+                docID = result.retrieve();
+            } else {
+                break;
+            }
+        }
+        sb.append("}");
+        return sb.toString();
     }
 
     public static void main(String[] args) {
