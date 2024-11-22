@@ -1,4 +1,3 @@
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -197,15 +196,16 @@ public class SearchEngineGUI {
         }
     }
 private void printIndexedDocuments() {
-        outputArea.setText("Indexed Documents with Word Counts:\n\n");
-        /*for (String doc : SE.invertedindex.displayInvertedIndex())*/ {  // Assuming `indexedDocs` returns document info
-         //   outputArea.append(doc + "\n");
-        }
+    String tokenscount = SE.displayDocTokenCounts();
+        outputArea.setText("Indexed Documents with Word Counts:\n"+ tokenscount);
+        
+
+
     }
 private void printIndexedTokens() {
        
     String invertedIndexOutput = SE.invertedindex. displayInvertedIndexWithCounts(); // Call your method from the SearchEngine class
-    outputArea.setText("IndexedTokens:\n" + invertedIndexOutput);
+    outputArea.setText("IndexedTokens with Doucument Counts:\n" + invertedIndexOutput);
        }
     
     private void rankedRetrieval() {
