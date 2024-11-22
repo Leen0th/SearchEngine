@@ -19,8 +19,8 @@ public class SearchEngineGUI {
     public SearchEngineGUI() {
         // Load dataset and stop words
         SE.Data(
-            "dataset/stop.txt",
-            "dataset/dataset.csv"
+            "C:\\Users\\renad\\OneDrive\\المستندات\\NetBeansProjects\\DSSProject1\\src\\main\\java\\rand\\dssproject1\\dataset\\stop.txt",
+            "C:\\Users\\renad\\OneDrive\\المستندات\\NetBeansProjects\\DSSProject1\\src\\main\\java\\rand\\dssproject1\\dataset\\dataset.csv"
         );
 
         // Main frame setup
@@ -82,16 +82,23 @@ public class SearchEngineGUI {
         JButton retrieveTerm = createStyledButton("Retrieve Term");
         JButton booleanRetrieval = createStyledButton("Boolean Retrieval");
         JButton rankedRetrieval = createStyledButton("Ranked Retrieval");
+        JButton printIndexedDocs = createStyledButton(" Indexed Documents");
+        JButton printIndexedTokens = createStyledButton(" Indexed Tokens");
 
         // Add action listeners to buttons
         retrieveTerm.addActionListener(e -> retrieveTerm());
         booleanRetrieval.addActionListener(e -> booleanRetrieval());
         rankedRetrieval.addActionListener(e -> rankedRetrieval());
+        printIndexedDocs.addActionListener(e -> printIndexedDocuments());
+        printIndexedTokens.addActionListener(e -> printIndexedTokens());
+        
 
         // Add buttons to panel
         buttonPanel.add(retrieveTerm);
         buttonPanel.add(booleanRetrieval);
         buttonPanel.add(rankedRetrieval);
+        buttonPanel.add(printIndexedDocs);
+        buttonPanel.add(printIndexedTokens);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -188,12 +195,23 @@ public class SearchEngineGUI {
             outputArea.append(formatResult(queryProcessingAVL.processQuery(query)) + "\n");
         }
     }
-
+private void printIndexedDocuments() {
+        outputArea.setText("Indexed Documents with Word Counts:\n\n");
+        /*for (String doc : SE.invertedindex.displayInvertedIndex())*/ {  // Assuming `indexedDocs` returns document info
+         //   outputArea.append(doc + "\n");
+        }
+    }
+private void printIndexedTokens() {
+       
+    String invertedIndexOutput = SE.invertedindex.displayInvertedIndex(); // Call your method from the SearchEngine class
+    outputArea.setText("IndexedTokens:\n" + invertedIndexOutput);
+       }
+    
     private void rankedRetrieval() {
         String query = JOptionPane.showInputDialog(frame, "Enter a query for ranked retrieval:", "Ranked Retrieval", JOptionPane.QUESTION_MESSAGE);
 
         if (query != null && !query.trim().isEmpty()) {
-            outputArea.setText("Ranked Retrieval Query: " + query + "\n\n");
+            outputArea.setText("Ranked Retrieval Query: " + query + "\n");
             outputArea.append(ranking.rank_query(query) + "\n");
         }
     }
