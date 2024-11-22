@@ -2,9 +2,9 @@ public class QueryProcessing {
     public InvertedIndex inverted;
     public InvertedIndexBST invertedBST;
     public Index index;
-    public InvertedIndexAVL invertedIndexAVL; // Use InvertedIndexAVL instead of AVL<Word>
+    public InvertedIndexAVL invertedIndexAVL;
 
-    // Constructor for BST-based query processing
+     // Constructor for BST-based query processing
     public QueryProcessing(InvertedIndexBST invertedBST) {
         this.invertedBST = invertedBST;
     }
@@ -21,7 +21,7 @@ public class QueryProcessing {
 
     // Constructor for InvertedIndexAVL-based query processing
     public QueryProcessing(InvertedIndexAVL invertedIndexAVL) {
-        this.invertedIndexAVL = invertedIndexAVL; // Initialize InvertedIndexAVL
+        this.invertedIndexAVL = invertedIndexAVL;
     }
 
     // Method to process a query using the appropriate data structure
@@ -39,15 +39,15 @@ public class QueryProcessing {
         }
     }
 
-    // Method to process a query (contains AND, OR) using the Index
+     // Method to process a query (contains AND, OR) using the Index
     public LinkedList<Integer> processQueryWithIndex(String query) {
-        String[] orTerms = query.split("OR");
+        String[] orTerms = query.split("(?i)\\s+OR\\s+"); 
         LinkedList<Integer> result = new LinkedList<>();
 
         for (String orTerm : orTerms) {
             orTerm = orTerm.trim();
             LinkedList<Integer> andResult = processAndQueryWithIndex(orTerm);
-            result = ORQuery(result, andResult); 
+            result = ORQuery(result, andResult);
         }
 
         return result;
@@ -55,7 +55,7 @@ public class QueryProcessing {
 
     // Helper method to process AND queries using the Index
     private LinkedList<Integer> processAndQueryWithIndex(String andQuery) {
-        String[] terms = andQuery.split("AND");
+        String[] terms = andQuery.split("(?i)\\s+AND\\s+"); 
         LinkedList<Integer> result = new LinkedList<>();
 
         if (terms.length == 0) return result;
@@ -79,21 +79,21 @@ public class QueryProcessing {
 
     // Method to process a query (contains AND, OR) using a List-based Inverted Index
     public LinkedList<Integer> processQueryWithInverted(String query) {
-        String[] orTerms = query.split("OR");
+        String[] orTerms = query.split("(?i)\\s+OR\\s+");
         LinkedList<Integer> result = new LinkedList<>();
 
         for (String orTerm : orTerms) {
             orTerm = orTerm.trim();
             LinkedList<Integer> andResult = processAndQueryWithInverted(orTerm);
-            result = ORQuery(result, andResult); 
+            result = ORQuery(result, andResult);
         }
 
         return result;
     }
 
-    // Helper method to process AND queries using a List-based Inverted Index
+     // Helper method to process AND queries using a List-based Inverted Index
     private LinkedList<Integer> processAndQueryWithInverted(String andQuery) {
-        String[] terms = andQuery.split("AND");
+        String[] terms = andQuery.split("(?i)\\s+AND\\s+");
         LinkedList<Integer> result = new LinkedList<>();
 
         if (terms.length == 0) return result;
@@ -109,7 +109,7 @@ public class QueryProcessing {
             if (termDocIDs == null) {
                 return new LinkedList<>();
             }
-            result = ANDQuery(result, termDocIDs); 
+            result = ANDQuery(result, termDocIDs);
         }
 
         return result;
@@ -117,7 +117,7 @@ public class QueryProcessing {
 
     // Method to process a query (contains AND, OR) using a BST-based Inverted Index
     public LinkedList<Integer> processQueryWithBST(String query) {
-        String[] orTerms = query.split("OR");
+        String[] orTerms = query.split("(?i)\\s+OR\\s+");
         LinkedList<Integer> result = new LinkedList<>();
 
         for (String orTerm : orTerms) {
@@ -131,7 +131,7 @@ public class QueryProcessing {
 
     // Helper method to process AND queries using a BST-based Inverted Index
     private LinkedList<Integer> processAndQueryWithBST(String andQuery) {
-        String[] terms = andQuery.split("AND");
+        String[] terms = andQuery.split("(?i)\\s+AND\\s+");
         LinkedList<Integer> result = new LinkedList<>();
 
         if (terms.length == 0) return result;
@@ -147,55 +147,54 @@ public class QueryProcessing {
             if (termDocIDs == null) {
                 return new LinkedList<>();
             }
-            result = ANDQuery(result, termDocIDs); 
+            result = ANDQuery(result, termDocIDs);
         }
 
         return result;
     }
 
- // Method to process a query (contains AND, OR) using InvertedIndexAVL
- public LinkedList<Integer> processQueryWithInvertedAVL(String query) {
-    String[] orTerms = query.split("OR");
-    LinkedList<Integer> result = new LinkedList<>();
+    // Method to process a query (contains AND, OR) using InvertedIndexAVL
+    public LinkedList<Integer> processQueryWithInvertedAVL(String query) {
+        String[] orTerms = query.split("(?i)\\s+OR\\s+");
+        LinkedList<Integer> result = new LinkedList<>();
 
-    for (String orTerm : orTerms) {
-        orTerm = orTerm.trim();
-        LinkedList<Integer> andResult = processAndQueryWithInvertedAVL(orTerm);
-        result = ORQuery(result, andResult);
-    }
-
-    return result;
-}
-
-// Helper method to process AND queries using InvertedIndexAVL
-private LinkedList<Integer> processAndQueryWithInvertedAVL(String andQuery) {
-    String[] terms = andQuery.split("AND");
-    LinkedList<Integer> result = new LinkedList<>();
-
-    if (terms.length == 0) return result;
-
-    LinkedList<Integer> firstTermDocIDs = getDocumentIDsFromInvertedAVL(terms[0].trim().toLowerCase());
-    if (firstTermDocIDs == null) return result;
-
-    result = firstTermDocIDs;
-
-    for (int i = 1; i < terms.length; i++) {
-        String term = terms[i].trim().toLowerCase();
-        LinkedList<Integer> termDocIDs = getDocumentIDsFromInvertedAVL(term);
-        if (termDocIDs == null) {
-            return new LinkedList<>();
+        for (String orTerm : orTerms) {
+            orTerm = orTerm.trim();
+            LinkedList<Integer> andResult = processAndQueryWithInvertedAVL(orTerm);
+            result = ORQuery(result, andResult);
         }
-        result = ANDQuery(result, termDocIDs);
+
+        return result;
     }
 
-    return result;
-}
+    // Helper method to process AND queries using InvertedIndexAVL
+    private LinkedList<Integer> processAndQueryWithInvertedAVL(String andQuery) {
+        String[] terms = andQuery.split("(?i)\\s+AND\\s+");
+        LinkedList<Integer> result = new LinkedList<>();
 
-// Helper method to retrieve document IDs for a word from InvertedIndexAVL
-private LinkedList<Integer> getDocumentIDsFromInvertedAVL(String word) {
-    return invertedIndexAVL.getDocumentIDsForWord(word); 
-}
+        if (terms.length == 0) return result;
 
+        LinkedList<Integer> firstTermDocIDs = getDocumentIDsFromInvertedAVL(terms[0].trim().toLowerCase());
+        if (firstTermDocIDs == null) return result;
+
+        result = firstTermDocIDs;
+
+        for (int i = 1; i < terms.length; i++) {
+            String term = terms[i].trim().toLowerCase();
+            LinkedList<Integer> termDocIDs = getDocumentIDsFromInvertedAVL(term);
+            if (termDocIDs == null) {
+                return new LinkedList<>();
+            }
+            result = ANDQuery(result, termDocIDs);
+        }
+
+        return result;
+    }
+
+    // Helper method to retrieve document IDs for a word from 
+    private LinkedList<Integer> getDocumentIDsFromInvertedAVL(String word) {
+        return invertedIndexAVL.getDocumentIDsForWord(word);
+    }
 
     // Method to perform an AND operation on two sets of document IDs
     public LinkedList<Integer> ANDQuery(LinkedList<Integer> A, LinkedList<Integer> B) {
