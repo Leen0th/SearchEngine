@@ -145,18 +145,26 @@ public class SearchEngine {
     }
 
     // Method to display documents with their token counts (excluding stop words)
-    public String displayDocTokenCounts() {
-        StringBuilder result = new StringBuilder();
-        // Iterate over the list of documents and their token counts
+public String displayDocTokenCounts() {
+    StringBuilder result = new StringBuilder();
+
+    if (!docTokenCounts.empty()) {
         docTokenCounts.findfirst();
         do {
             DocumentTokenCount doc = docTokenCounts.retrieve();
             result.append("Document ID: ").append(doc.docId)
-                  .append(", Token Count : ").append(doc.tokenCount)
+                  .append(", Token Count: ").append(doc.tokenCount)
                   .append("\n");
-            docTokenCounts.findnext();
-        } while (!docTokenCounts.last());
 
-        return result.toString();
+            if (docTokenCounts.last()) {
+                break; 
+            }
+            docTokenCounts.findnext();
+        } while (true); 
+    } else {
+        result.append("No documents available.");
     }
+    return result.toString();
+}
+
 }
