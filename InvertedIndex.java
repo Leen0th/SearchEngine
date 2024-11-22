@@ -79,7 +79,6 @@ public class InvertedIndex {
     // Returns the contents of the inverted index as a formatted string, including each word and the number of documents it appears in.
     public String displayInvertedIndexWithCounts() {
         StringBuilder output = new StringBuilder();
-        output.append("Inverted Index with Counts:\n");
     
         index.findfirst();
         while (index.retrieve() != null) {

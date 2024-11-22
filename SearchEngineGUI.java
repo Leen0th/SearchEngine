@@ -204,7 +204,7 @@ private void printIndexedDocuments() {
     }
 private void printIndexedTokens() {
        
-    String invertedIndexOutput = SE.invertedindex. displayInvertedIndexWithCounts(); // Call your method from the SearchEngine class
+    String invertedIndexOutput = SE.invertedindex. displayInvertedIndexWithCounts(); 
     outputArea.setText("IndexedTokens with Doucument Counts:\n" + invertedIndexOutput);
        }
     
