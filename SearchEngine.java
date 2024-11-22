@@ -41,7 +41,16 @@ public class SearchEngine {
                     int firstCommaIndex = line.indexOf(',');
                     if (firstCommaIndex != -1) {
                         int docId = Integer.parseInt(line.substring(0, firstCommaIndex).trim());
-                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\'", "").replaceAll("-", " ").trim();
+                        String text = line.substring(firstCommaIndex + 1).trim().replaceAll("\'", "").trim();
+                        while (text.contains("-")) {
+                            if(text.indexOf("-")==1)
+                            text=text.replaceFirst("-", "");
+                            else if(text.charAt(text.indexOf("-")-2)==' ')
+                            text=text.replaceFirst("-", "");
+                            else
+                            text=text.replaceFirst("-", " ");
+                            
+                        }
 
                         String[] words = text.split("[\\s]+"); 
                         tokens += words.length;
